@@ -134,6 +134,20 @@ def set_up_window():
         master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
     )
     rear_arb_input.pack()
+
+    front_rh_label = Label(master=suspension_tab, text="Front Ride Height")
+    front_rh_input = tk.Scale(
+        master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
+    )
+    front_rh_label.pack()
+    front_rh_input.pack()
+
+    rear_rh_label = Label(master=suspension_tab, text="Rear Ride Height")
+    rear_rh_input = tk.Scale(
+        master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
+    )
+    rear_rh_label.pack()
+    rear_rh_input.pack()
     # TODO: Brake pressure / bias
     # TODO: Tires
 

@@ -22,6 +22,8 @@ def set_up_window():
     transmission_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     suspension_geo_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     suspension_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
+    brakes_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
+    tires_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
 
     front_wing_label = Label(master=aero_tab, text="Front Wing Aero")
     front_wing_label.pack()
@@ -148,14 +150,37 @@ def set_up_window():
     )
     rear_rh_label.pack()
     rear_rh_input.pack()
-    # TODO: Brake pressure / bias
-    # TODO: Tires
+
+    # Brakes
+    brake_pressure_label = Label(master=brakes_tab, text="Brake Pressure")
+    brake_pressure_input = tk.Scale(
+        master=brakes_tab, from_=50, to=100, resolution=1, orient="horizontal"
+    )
+    brake_pressure_label.pack()
+    brake_pressure_input.pack()
+
+    # Tires
+    front_tp_label = Label(master=tires_tab, text="Front Tire Pressure")
+    front_tp_input = tk.Scale(
+        master=tires_tab, from_=21, to=25, resolution=0.1, orient="horizontal"
+    )
+    front_tp_label.pack()
+    front_tp_input.pack()
+
+    rear_tp_label = Label(master=tires_tab, text="Rear Tire Pressure")
+    rear_tp_input = tk.Scale(
+        master=tires_tab, from_=19.5, to=23.5, resolution=0.1, orient="horizontal"
+    )
+    rear_tp_label.pack()
+    rear_tp_input.pack()
 
     notebook.pack()
     notebook.add(aero_tab, text="Aerodynamics")
     notebook.add(transmission_tab, text="Transmission")
     notebook.add(suspension_geo_tab, text="Suspension Geometry")
     notebook.add(suspension_tab, text="Suspension")
+    notebook.add(brakes_tab, text="Brakes")
+    notebook.add(tires_tab, text="Tires")
 
     return root
 

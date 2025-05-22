@@ -193,7 +193,9 @@ def set_up_window():
     notebook.add(child=tires_tab, text="Tires")
 
     b = tk.Button(
-        master=root, command=lambda: convertSetup(notebook), text="Convert Setup"
+        master=root,
+        command=lambda: convert_and_display_setup(notebook, root),
+        text="Convert Setup",
     )
     b.pack()
 
@@ -213,8 +215,6 @@ def getEntryWidgetsFromTabs(notebook):
         for widget in widgets_in_tab:
             if isinstance(widget, tk.Scale):
                 entries_by_setup_area[tab_title].append(widget.get())
-
-    print(f"entries: \n {entries_by_setup_area}")
 
     return entries_by_setup_area
 
@@ -366,13 +366,42 @@ def convertSetup(notebook):
         "Front Tire Pressure": new_tire_pressure_values[0],
         "Rear Tire Pressure": new_tire_pressure_values[1],
     }
-    print(f"result: \n {result_dict}")
+
     return result_dict
+
+
+def convert_and_display_setup(page_w_existing_setup, window_to_display_on):
+    new_setup = convertSetup(page_w_existing_setup)
+    new_setup_window = tk.Toplevel(window_to_display_on)
+    new_setup_window.title("Converted Setup")
+
+    # {setup_area : setup_item}
+    # in setup_item => {setup_item_name : setup_item_value, ..}
+    # eg: {"Aerodynamics" : {Front wing: 1, Rear wing: 2, ..}}
+    for setup_area, setup_item in new_setup.items():
+        area_frame = Frame(master=new_setup_window, width=500, height=500)
+        area_frame.pack(pady=20)
+        setup_area_label = Label(master=area_frame, text=setup_area)
+        setup_area_label.pack()
+        for setup_item_name, setup_item_value in setup_item.items():
+            item_frame = Frame(master=area_frame, width=1000, height=1000)
+            item_frame.pack(side="left", padx=10, pady=10)
+            setup_item_name_label = Label(
+                master=item_frame, text=str(setup_item_name) + ": "
+            )
+            setup_item_value_label = Label(
+                master=item_frame, text=str(setup_item_value)
+            )
+            setup_item_name_label.pack(side="left")
+            setup_item_value_label.pack(side="left")
+
+    label = Label(master=new_setup_window)
+    label.pack()
+    return
 
 
 def main():
     root = set_up_window()
-    # notebook = root.winfo_children()[0]
     root.mainloop()
 
 

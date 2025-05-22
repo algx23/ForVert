@@ -262,7 +262,7 @@ def update_suspension(init_suspension_val):
     if front_suspension > 5:
         front_suspension -= 2
     else:
-        front_suspension - 1
+        front_suspension -= 1
 
     if rear_suspension > 5:
         rear_suspension -= 2

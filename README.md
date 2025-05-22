@@ -47,7 +47,7 @@ There are some features which I am considering developing, to take this from a s
 
 These include:
 
-- Making the UI better (it is very basic right now) -> potentially migrating away from Tkinter for a better looking and more seamless UI experience
+- Making the UI better (it is very basic right now) -> potentially migrating away from Tkinter to PyQT6 for a better looking and more seamless UI experience
 - More F1 Games, (F1 25 will be next, then I will work back)
 - Track guides for many different tracks
 - Telemetry analysis and presentation (timescale unknown)

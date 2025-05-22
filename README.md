@@ -20,6 +20,8 @@ This is an application which will convert your dry F1 Game setups to wet setups!
 - Tkinter
 - Ttk
 
+:warning: **Note:** In future, I may migrate away from TKinter/ttk, but for now, tkinter is fine
+
 ## Usage
 
 1. Clone the repo:
@@ -37,15 +39,15 @@ This is an application which will convert your dry F1 Game setups to wet setups!
 
 ---
 
-## In the works
+## :construction: In the works :construction:
 
-:warning: The time scale for these features is unknown. I will try push them out as regularly as I can.
+:hourglass_flowing_sand: The time scale for these features is unknown. I will try push them out as regularly as I can.
 
 There are some features which I am considering developing, to take this from a simple F1 Game Setup Converter to a full companion.
 
 These include:
 
-- Making the UI better (it is very basic right now)
+- Making the UI better (it is very basic right now) -> potentially migrating away from Tkinter for a better looking and more seamless UI experience
 - More F1 Games, (F1 25 will be next, then I will work back)
 - Track guides for many different tracks
 - Telemetry analysis and presentation (timescale unknown)

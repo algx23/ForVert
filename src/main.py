@@ -1,203 +1,249 @@
-import tkinter as tk
-from tkinter.ttk import Notebook
-from tkinter.ttk import Frame
-from tkinter.ttk import Label
+from PyQt6.QtWidgets import (
+    QApplication,
+    QTabWidget,
+    QMainWindow,
+    QLabel,
+    QSlider,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+)
+from PyQt6.QtCore import Qt
 
 
-def set_up_window():
+def create_aero_tab():
+    # aerodynamics
+
+    aero_page = QWidget()
+    aero_page_layout = QVBoxLayout()
+    aero_page.setLayout(aero_page_layout)
+
+    # in the front wing and rear wing sections the widgets appear next to each other
+    front_wing_section_layout = QHBoxLayout()
+    rear_wing_section_layout = QHBoxLayout()
+
+    front_wing_label = QLabel()
+    front_wing_label.setText("Front Wing Aero")
+    front_wing_slider = QSlider(Qt.Orientation.Horizontal)
+    front_wing_slider.setMinimum(1)
+    front_wing_slider.setMaximum(11)
+
+    # show the value of the slider next to it, and update it when a you drag across it
+    selected_front_wing_value_label = QLabel(str(front_wing_slider.value()))
+    front_wing_slider.valueChanged.connect(
+        lambda: selected_front_wing_value_label.setText(str(front_wing_slider.value()))
+    )
+
+    rear_wing_label = QLabel()
+    rear_wing_label.setText("Rear Wing Aero")
+    rear_wing_slider = QSlider(Qt.Orientation.Horizontal)
+    rear_wing_slider.setMinimum(1)
+    rear_wing_slider.setMaximum(11)
+    selected_rear_wing_value_label = QLabel(str(rear_wing_slider.value()))
+    rear_wing_slider.valueChanged.connect(
+        lambda: selected_rear_wing_value_label.setText(str(rear_wing_slider.value()))
+    )
+
+    front_aero_widgets = [
+        front_wing_label,
+        front_wing_slider,
+        selected_front_wing_value_label,
+    ]
+    rear_aero_widgets = [
+        rear_wing_label,
+        rear_wing_slider,
+        selected_rear_wing_value_label,
+    ]
+
+    # in each section: section title, slider, slider value
+    for widget in front_aero_widgets:
+        front_wing_section_layout.addWidget(widget)
+    for widget in rear_aero_widgets:
+        rear_wing_section_layout.addWidget(widget)
+
+    aero_page_layout.addLayout(front_wing_section_layout)
+    aero_page_layout.addLayout(rear_wing_section_layout)
+
+    return aero_page
+
+
+def set_up_window(root):
     """
     This function sets up the window by adding the labels and widgets to enter
     the dry setup details
     """
-    HEIGHT: int = 1000
-    WIDTH: int = 1000
-    TAB_HEIGHT: int = 500
-    TAB_WIDTH: int = 500
-    root = tk.Tk()
-    root.minsize(width=WIDTH, height=HEIGHT)
-    root.title("F1 Setup Hub")
 
-    notebook = Notebook(master=root, height=TAB_HEIGHT, width=TAB_WIDTH)
+    setup_tabs = QTabWidget()
+    root.setCentralWidget(setup_tabs)
+    aero_tab = create_aero_tab()
+    setup_tabs.addTab(aero_tab, "Aerodynamics")
+    # notebook = Notebook(master=root, height=TAB_HEIGHT, width=TAB_WIDTH)
 
     # tabs for the different areas of setup
-    aero_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
-    transmission_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
-    suspension_geo_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
-    suspension_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
-    brakes_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
-    tires_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
+    # transmission_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
+    # suspension_geo_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
+    # suspension_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
+    # brakes_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
+    # tires_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
 
-    # aerodynamics
-    front_wing_label = Label(master=aero_tab, text="Front Wing Aero")
-    front_wing_label.pack()
-    front_wing_slider = tk.Scale(
-        master=aero_tab, from_=1, to=11, orient="horizontal", resolution=1
-    )
-    front_wing_slider.pack()
+    # # transmission
+    # diff_adjust_on_label = Label(
+    #     master=transmission_tab, text="Differential Adjustment On Throttle (%)"
+    # )
+    # diff_adjust_on_input = tk.Scale(
+    #     master=transmission_tab, from_=50, to=100, orient="horizontal"
+    # )
+    # diff_adjust_on_label.pack()
+    # diff_adjust_on_input.pack()
 
-    rear_wing_label = Label(master=aero_tab, text="Rear Wing Aero")
-    rear_wing_label.pack()
-    rear_wing_slider = tk.Scale(master=aero_tab, from_=1, to=11, orient="horizontal")
-    rear_wing_slider.pack()
+    # diff_adjust_off_label = Label(
+    #     master=transmission_tab, text="Differential Adjustment Off throttle"
+    # )
+    # diff_adjust_off_input = tk.Scale(
+    #     master=transmission_tab, from_=50, to=100, orient="horizontal"
+    # )
+    # diff_adjust_off_label.pack()
+    # diff_adjust_off_input.pack()
 
-    # transmission
-    diff_adjust_on_label = Label(
-        master=transmission_tab, text="Differential Adjustment On Throttle (%)"
-    )
-    diff_adjust_on_input = tk.Scale(
-        master=transmission_tab, from_=50, to=100, orient="horizontal"
-    )
-    diff_adjust_on_label.pack()
-    diff_adjust_on_input.pack()
+    # # suspension geometry
 
-    diff_adjust_off_label = Label(
-        master=transmission_tab, text="Differential Adjustment Off throttle"
-    )
-    diff_adjust_off_input = tk.Scale(
-        master=transmission_tab, from_=50, to=100, orient="horizontal"
-    )
-    diff_adjust_off_label.pack()
-    diff_adjust_off_input.pack()
+    # # camber
+    # front_camber_label = Label(master=suspension_geo_tab, text="Front Camber")
+    # front_camber_slider = tk.Scale(
+    #     master=suspension_geo_tab,
+    #     from_=-3.50,
+    #     to=-2.50,
+    #     resolution=0.1,
+    #     orient="horizontal",
+    # )
+    # front_camber_label.pack()
+    # front_camber_slider.pack()
 
-    # suspension geometry
+    # rear_camber_label = Label(master=suspension_geo_tab, text="Rear Camber")
+    # rear_camber_slider = tk.Scale(
+    #     master=suspension_geo_tab,
+    #     from_=-3.50,
+    #     to=-2.5,
+    #     resolution=0.1,
+    #     orient="horizontal",
+    # )
+    # rear_camber_label.pack()
+    # rear_camber_slider.pack()
 
-    # camber
-    front_camber_label = Label(master=suspension_geo_tab, text="Front Camber")
-    front_camber_slider = tk.Scale(
-        master=suspension_geo_tab,
-        from_=-3.50,
-        to=-2.50,
-        resolution=0.1,
-        orient="horizontal",
-    )
-    front_camber_label.pack()
-    front_camber_slider.pack()
+    # # toe
+    # front_toe_label = Label(master=suspension_geo_tab, text="Front Toe")
+    # front_toe_slider = tk.Scale(
+    #     master=suspension_geo_tab,
+    #     orient="horizontal",
+    #     from_=0.05,
+    #     to=0.15,
+    #     resolution=0.01,
+    # )
+    # front_toe_label.pack()
+    # front_toe_slider.pack()
 
-    rear_camber_label = Label(master=suspension_geo_tab, text="Rear Camber")
-    rear_camber_slider = tk.Scale(
-        master=suspension_geo_tab,
-        from_=-3.50,
-        to=-2.5,
-        resolution=0.1,
-        orient="horizontal",
-    )
-    rear_camber_label.pack()
-    rear_camber_slider.pack()
+    # rear_toe_label = Label(master=suspension_geo_tab, text="Rear Toe")
+    # rear_toe_slider = tk.Scale(
+    #     master=suspension_geo_tab,
+    #     orient="horizontal",
+    #     from_=0.20,
+    #     to=0.50,
+    #     resolution=0.01,
+    # )
+    # rear_toe_label.pack()
+    # rear_toe_slider.pack()
 
-    # toe
-    front_toe_label = Label(master=suspension_geo_tab, text="Front Toe")
-    front_toe_slider = tk.Scale(
-        master=suspension_geo_tab,
-        orient="horizontal",
-        from_=0.05,
-        to=0.15,
-        resolution=0.01,
-    )
-    front_toe_label.pack()
-    front_toe_slider.pack()
+    # # Suspension
+    # front_suspension_label = Label(
+    #     master=suspension_tab, text="Front Suspension (soft - firm)"
+    # )
+    # front_suspension_label.pack()
+    # front_suspension_input = tk.Scale(
+    #     master=suspension_tab, orient="horizontal", from_=1, to=11, resolution=1
+    # )
+    # front_suspension_input.pack()
 
-    rear_toe_label = Label(master=suspension_geo_tab, text="Rear Toe")
-    rear_toe_slider = tk.Scale(
-        master=suspension_geo_tab,
-        orient="horizontal",
-        from_=0.20,
-        to=0.50,
-        resolution=0.01,
-    )
-    rear_toe_label.pack()
-    rear_toe_slider.pack()
+    # rear_suspension_label = Label(
+    #     master=suspension_tab, text="rear Suspension (soft - firm)"
+    # )
+    # rear_suspension_label.pack()
+    # rear_suspension_input = tk.Scale(
+    #     master=suspension_tab, orient="horizontal", from_=1, to=11, resolution=1
+    # )
+    # rear_suspension_input.pack()
 
-    # Suspension
-    front_suspension_label = Label(
-        master=suspension_tab, text="Front Suspension (soft - firm)"
-    )
-    front_suspension_label.pack()
-    front_suspension_input = tk.Scale(
-        master=suspension_tab, orient="horizontal", from_=1, to=11, resolution=1
-    )
-    front_suspension_input.pack()
+    # front_arb_label = Label(master=suspension_tab, text="Front Anti Roll Bar")
+    # front_arb_label.pack()
+    # front_arb_input = tk.Scale(
+    #     master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
+    # )
+    # front_arb_input.pack()
 
-    rear_suspension_label = Label(
-        master=suspension_tab, text="rear Suspension (soft - firm)"
-    )
-    rear_suspension_label.pack()
-    rear_suspension_input = tk.Scale(
-        master=suspension_tab, orient="horizontal", from_=1, to=11, resolution=1
-    )
-    rear_suspension_input.pack()
+    # rear_arb_label = Label(master=suspension_tab, text="rear Anti Roll Bar")
+    # rear_arb_label.pack()
+    # rear_arb_input = tk.Scale(
+    #     master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
+    # )
+    # rear_arb_input.pack()
 
-    front_arb_label = Label(master=suspension_tab, text="Front Anti Roll Bar")
-    front_arb_label.pack()
-    front_arb_input = tk.Scale(
-        master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
-    )
-    front_arb_input.pack()
+    # front_rh_label = Label(master=suspension_tab, text="Front Ride Height")
+    # front_rh_input = tk.Scale(
+    #     master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
+    # )
+    # front_rh_label.pack()
+    # front_rh_input.pack()
 
-    rear_arb_label = Label(master=suspension_tab, text="rear Anti Roll Bar")
-    rear_arb_label.pack()
-    rear_arb_input = tk.Scale(
-        master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
-    )
-    rear_arb_input.pack()
+    # rear_rh_label = Label(master=suspension_tab, text="Rear Ride Height")
+    # rear_rh_input = tk.Scale(
+    #     master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
+    # )
+    # rear_rh_label.pack()
+    # rear_rh_input.pack()
 
-    front_rh_label = Label(master=suspension_tab, text="Front Ride Height")
-    front_rh_input = tk.Scale(
-        master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
-    )
-    front_rh_label.pack()
-    front_rh_input.pack()
+    # # Brakes
+    # brake_pressure_label = Label(master=brakes_tab, text="Brake Pressure")
+    # brake_pressure_input = tk.Scale(
+    #     master=brakes_tab, from_=50, to=100, resolution=1, orient="horizontal"
+    # )
+    # brake_pressure_label.pack()
+    # brake_pressure_input.pack()
 
-    rear_rh_label = Label(master=suspension_tab, text="Rear Ride Height")
-    rear_rh_input = tk.Scale(
-        master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
-    )
-    rear_rh_label.pack()
-    rear_rh_input.pack()
+    # brake_bias_label = Label(master=brakes_tab, text="Brake Pressure (Front ---  Rear)")
+    # brake_bias_input = tk.Scale(
+    #     master=brakes_tab, from_=70, to=50, resolution=1, orient="horizontal"
+    # )
+    # brake_bias_label.pack()
+    # brake_bias_input.pack()
 
-    # Brakes
-    brake_pressure_label = Label(master=brakes_tab, text="Brake Pressure")
-    brake_pressure_input = tk.Scale(
-        master=brakes_tab, from_=50, to=100, resolution=1, orient="horizontal"
-    )
-    brake_pressure_label.pack()
-    brake_pressure_input.pack()
+    # # Tires
+    # front_tp_label = Label(master=tires_tab, text="Front Tire Pressure")
+    # front_tp_input = tk.Scale(
+    #     master=tires_tab, from_=21, to=25, resolution=0.1, orient="horizontal"
+    # )
+    # front_tp_label.pack()
+    # front_tp_input.pack()
 
-    brake_bias_label = Label(master=brakes_tab, text="Brake Pressure (Front ---  Rear)")
-    brake_bias_input = tk.Scale(
-        master=brakes_tab, from_=70, to=50, resolution=1, orient="horizontal"
-    )
-    brake_bias_label.pack()
-    brake_bias_input.pack()
+    # rear_tp_label = Label(master=tires_tab, text="Rear Tire Pressure")
+    # rear_tp_input = tk.Scale(
+    #     master=tires_tab, from_=19.5, to=23.5, resolution=0.1, orient="horizontal"
+    # )
+    # rear_tp_label.pack()
+    # rear_tp_input.pack()
 
-    # Tires
-    front_tp_label = Label(master=tires_tab, text="Front Tire Pressure")
-    front_tp_input = tk.Scale(
-        master=tires_tab, from_=21, to=25, resolution=0.1, orient="horizontal"
-    )
-    front_tp_label.pack()
-    front_tp_input.pack()
+    # notebook.pack()
+    # notebook.add(child=aero_tab, text="Aerodynamics")
+    # notebook.add(child=transmission_tab, text="Transmission")
+    # notebook.add(child=suspension_geo_tab, text="Suspension Geometry")
+    # notebook.add(child=suspension_tab, text="Suspension")
+    # notebook.add(child=brakes_tab, text="Brakes")
+    # notebook.add(child=tires_tab, text="Tires")
 
-    rear_tp_label = Label(master=tires_tab, text="Rear Tire Pressure")
-    rear_tp_input = tk.Scale(
-        master=tires_tab, from_=19.5, to=23.5, resolution=0.1, orient="horizontal"
-    )
-    rear_tp_label.pack()
-    rear_tp_input.pack()
-
-    notebook.pack()
-    notebook.add(child=aero_tab, text="Aerodynamics")
-    notebook.add(child=transmission_tab, text="Transmission")
-    notebook.add(child=suspension_geo_tab, text="Suspension Geometry")
-    notebook.add(child=suspension_tab, text="Suspension")
-    notebook.add(child=brakes_tab, text="Brakes")
-    notebook.add(child=tires_tab, text="Tires")
-
-    b = tk.Button(
-        master=root,
-        command=lambda: convert_and_display_setup(notebook, root),
-        text="Convert Setup",
-    )
-    b.pack()
+    # b = tk.Button(
+    #     master=root,
+    #     command=lambda: convert_and_display_setup(notebook, root),
+    #     text="Convert Setup",
+    # )
+    # b.pack()
 
     return root
 
@@ -315,13 +361,13 @@ def convertSetup(notebook):
     widgets = getEntryWidgetsFromTabs(notebook)
 
     #################################
-    # Update key index => tab title #
-    # 0 => Aero                     #
-    # 1 => Transmission             #
-    # 2 => Suspension Geometry      #
-    # 3 => Suspension               #
-    # 4 => Brakes                   #
-    # 5 => Tires                    #
+    # Update key index => tab title
+    # 0 => Aero
+    # 1 => Transmission
+    # 2 => Suspension Geometry
+    # 3 => Suspension
+    # 4 => Brakes
+    # 5 => Tires
     #################################
 
     result_dict = dict()
@@ -401,8 +447,13 @@ def convert_and_display_setup(page_w_existing_setup, window_to_display_on):
 
 
 def main():
-    root = set_up_window()
-    root.mainloop()
+
+    app = QApplication([])
+    root = QMainWindow()
+    set_up_window(root)
+    root.show()
+    app.exec()
+    # root.mainloop()
 
 
 if __name__ == "__main__":

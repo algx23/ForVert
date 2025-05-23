@@ -132,7 +132,6 @@ def set_up_window(root):
     # notebook = Notebook(master=root, height=TAB_HEIGHT, width=TAB_WIDTH)
 
     # tabs for the different areas of setup
-    # transmission_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # suspension_geo_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # suspension_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # brakes_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)

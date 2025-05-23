@@ -218,6 +218,139 @@ def create_suspension_geo_tab():
     return suspension_geo_page
 
 
+def create_suspension_tab():
+
+    # general layouts
+    suspension_page = QWidget()
+    suspension_page_layout = QVBoxLayout()
+    suspension_page.setLayout(suspension_page_layout)
+
+    # all the sliders share the same min and max so just define them here
+    SLIDER_MIN = 1
+    SLIDER_MAX = 11
+    sliders = []
+    # suspension layout
+    front_suspension_layout = QHBoxLayout()
+    rear_suspension_layout = QHBoxLayout()
+
+    # arb layout
+    front_arb_layout = QHBoxLayout()
+    rear_arb_layout = QHBoxLayout()
+
+    # rh layout
+    front_rh_layout = QHBoxLayout()
+    rear_rh_layout = QHBoxLayout()
+    layouts = [
+        front_suspension_layout,
+        rear_suspension_layout,
+        front_arb_layout,
+        rear_arb_layout,
+        front_rh_layout,
+        rear_rh_layout,
+    ]
+
+    for layout in layouts:
+        suspension_page_layout.addLayout(layout)
+
+    # Suspension
+    front_suspension_label = QLabel("Front Suspension (soft - firm)")
+    front_suspension_slider = QSlider(Qt.Orientation.Horizontal)
+    selected_front_suspension_value_label = QLabel(str(front_suspension_slider.value()))
+    front_suspension_slider.valueChanged.connect(
+        lambda: selected_front_suspension_value_label.setText(
+            str(front_suspension_slider.value())
+        )
+    )
+    front_suspension_widgets = [
+        front_suspension_label,
+        front_suspension_slider,
+        selected_front_suspension_value_label,
+    ]
+    for widget in front_suspension_widgets:
+        front_suspension_layout.addWidget(widget)
+
+    # rear suspension
+
+    rear_suspension_label = QLabel("Rear Suspension (soft - firm)")
+    rear_suspension_slider = QSlider(Qt.Orientation.Horizontal)
+    selected_rear_suspension_value_label = QLabel(str(rear_suspension_slider.value()))
+    rear_suspension_slider.valueChanged.connect(
+        lambda: selected_rear_suspension_value_label.setText(
+            str(rear_suspension_slider.value())
+        )
+    )
+
+    rear_suspension_widgets = [
+        rear_suspension_label,
+        rear_suspension_slider,
+        selected_rear_suspension_value_label,
+    ]
+    sliders.append(front_suspension_slider)
+    sliders.append(rear_suspension_slider)
+
+    for widget in rear_suspension_widgets:
+        rear_suspension_layout.addWidget(widget)
+
+    # front anti roll bar
+    front_arb_label = QLabel("Front Anti Roll Bar")
+    front_arb_slider = QSlider(Qt.Orientation.Horizontal)
+    sliders.append(front_arb_slider)
+    selected_front_arb_value_label = QLabel(str(front_arb_slider.value()))
+    front_arb_slider.valueChanged.connect(
+        lambda: selected_front_arb_value_label.setText(str(front_arb_slider.value()))
+    )
+    front_arb_widgets = [
+        front_arb_label,
+        front_arb_slider,
+        selected_front_arb_value_label,
+    ]
+    for widget in front_arb_widgets:
+        front_arb_layout.addWidget(widget)
+
+    # rear anti roll bar
+    rear_arb_label = QLabel("Rear Anti Roll Bar")
+    rear_arb_slider = QSlider(Qt.Orientation.Horizontal)
+    sliders.append(rear_arb_slider)
+    selected_rear_arb_value_label = QLabel(str(rear_arb_slider.value()))
+    rear_arb_slider.valueChanged.connect(
+        lambda: selected_rear_arb_value_label.setText(str(rear_arb_slider.value()))
+    )
+    rear_arb_widgets = [rear_arb_label, rear_arb_slider, selected_rear_arb_value_label]
+    for widget in rear_arb_widgets:
+        rear_arb_layout.addWidget(widget)
+
+    # front ride height
+    front_rh_label = QLabel("Front Ride Height")
+    front_rh_slider = QSlider(Qt.Orientation.Horizontal)
+    sliders.append(front_rh_slider)
+    selected_front_rh_value_label = QLabel(str(front_rh_slider.value()))
+    front_rh_slider.valueChanged.connect(
+        lambda: selected_front_rh_value_label.setText(str(front_rh_slider.value()))
+    )
+    front_rh_widgets = [front_rh_label, front_rh_slider, selected_front_rh_value_label]
+
+    for widget in front_rh_widgets:
+        front_rh_layout.addWidget(widget)
+
+    # rear ride height
+    rear_rh_label = QLabel("Rear Ride Height")
+    rear_rh_slider = QSlider(Qt.Orientation.Horizontal)
+    sliders.append(rear_rh_slider)
+    selected_rear_rh_value_label = QLabel(str(rear_rh_slider.value()))
+    rear_rh_slider.valueChanged.connect(
+        lambda: selected_rear_rh_value_label.setText(str(rear_rh_slider.value()))
+    )
+    rear_rh_widgets = [rear_rh_label, rear_rh_slider, selected_rear_rh_value_label]
+    for widget in rear_rh_widgets:
+        rear_rh_layout.addWidget(widget)
+
+    for slider in sliders:
+        slider.setMinimum(SLIDER_MIN)
+        slider.setMaximum(SLIDER_MAX)
+
+    return suspension_page
+
+
 def set_up_window(root):
     """
     This function sets up the window by adding the labels and widgets to enter
@@ -227,64 +360,18 @@ def set_up_window(root):
     setup_tabs = QTabWidget()
     root.setCentralWidget(setup_tabs)
     aero_tab = create_aero_tab()
+    suspension_tab = create_suspension_tab()
     transmission_tab = create_transmission_tab()
     suspension_geometry_tab = create_suspension_geo_tab()
     setup_tabs.addTab(aero_tab, "Aerodynamics")
     setup_tabs.addTab(transmission_tab, "Transmission")
     setup_tabs.addTab(suspension_geometry_tab, "Suspension Geometry")
-    # notebook = Notebook(master=root, height=TAB_HEIGHT, width=TAB_WIDTH)
+    setup_tabs.addTab(suspension_tab, "Suspension")
 
+    # TODO: convert these tabs to PyQt From TKinter
     # tabs for the different areas of setup
-    # suspension_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # brakes_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # tires_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
-
-    # # Suspension
-    # front_suspension_label = Label(
-    #     master=suspension_tab, text="Front Suspension (soft - firm)"
-    # )
-    # front_suspension_label.pack()
-    # front_suspension_input = tk.Scale(
-    #     master=suspension_tab, orient="horizontal", from_=1, to=11, resolution=1
-    # )
-    # front_suspension_input.pack()
-
-    # rear_suspension_label = Label(
-    #     master=suspension_tab, text="rear Suspension (soft - firm)"
-    # )
-    # rear_suspension_label.pack()
-    # rear_suspension_input = tk.Scale(
-    #     master=suspension_tab, orient="horizontal", from_=1, to=11, resolution=1
-    # )
-    # rear_suspension_input.pack()
-
-    # front_arb_label = Label(master=suspension_tab, text="Front Anti Roll Bar")
-    # front_arb_label.pack()
-    # front_arb_input = tk.Scale(
-    #     master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
-    # )
-    # front_arb_input.pack()
-
-    # rear_arb_label = Label(master=suspension_tab, text="rear Anti Roll Bar")
-    # rear_arb_label.pack()
-    # rear_arb_input = tk.Scale(
-    #     master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
-    # )
-    # rear_arb_input.pack()
-
-    # front_rh_label = Label(master=suspension_tab, text="Front Ride Height")
-    # front_rh_input = tk.Scale(
-    #     master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
-    # )
-    # front_rh_label.pack()
-    # front_rh_input.pack()
-
-    # rear_rh_label = Label(master=suspension_tab, text="Rear Ride Height")
-    # rear_rh_input = tk.Scale(
-    #     master=suspension_tab, from_=1, to=11, resolution=1, orient="horizontal"
-    # )
-    # rear_rh_label.pack()
-    # rear_rh_input.pack()
 
     # # Brakes
     # brake_pressure_label = Label(master=brakes_tab, text="Brake Pressure")
@@ -316,14 +403,6 @@ def set_up_window(root):
     # rear_tp_label.pack()
     # rear_tp_input.pack()
 
-    # notebook.pack()
-    # notebook.add(child=aero_tab, text="Aerodynamics")
-    # notebook.add(child=transmission_tab, text="Transmission")
-    # notebook.add(child=suspension_geo_tab, text="Suspension Geometry")
-    # notebook.add(child=suspension_tab, text="Suspension")
-    # notebook.add(child=brakes_tab, text="Brakes")
-    # notebook.add(child=tires_tab, text="Tires")
-
     # b = tk.Button(
     #     master=root,
     #     command=lambda: convert_and_display_setup(notebook, root),
@@ -334,6 +413,7 @@ def set_up_window(root):
     return root
 
 
+# TODO: Convert conversion logic (lol convert conversion) to PyQT from Tkinter
 def getEntryWidgetsFromTabs(notebook):
     tabs = notebook.winfo_children()
     entries_by_setup_area = dict()

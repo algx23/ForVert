@@ -67,6 +67,56 @@ def create_aero_tab():
     return aero_page
 
 
+def create_transmission_tab():
+    transmission_page = QWidget()
+    transmission_page_layout = QVBoxLayout()
+    transmission_page.setLayout(transmission_page_layout)
+
+    # on throttle
+    on_throttle_layout = QHBoxLayout()
+    diff_adjust_on_label = QLabel("Differential Adjustment On Throttle (%)")
+    diff_adjust_on_slider = QSlider(Qt.Orientation.Horizontal)
+    diff_adjust_on_slider.setMaximum(100)
+    diff_adjust_on_slider.setMinimum(50)
+
+    selected_diff_on_value = QLabel()
+    diff_adjust_on_slider.valueChanged.connect(
+        lambda: selected_diff_on_value.setText(str(diff_adjust_on_slider.value()))
+    )
+
+    on_throttle_widgets = [
+        diff_adjust_on_label,
+        diff_adjust_on_slider,
+        selected_diff_on_value,
+    ]
+
+    # off throttle
+    off_throttle_layout = QHBoxLayout()
+    diff_adjust_off_label = QLabel("Differential Adjustment Off throttle (%)")
+    diff_adjust_off_slider = QSlider(Qt.Orientation.Horizontal)
+    diff_adjust_off_slider.setMinimum(50)
+    diff_adjust_off_slider.setMaximum(100)
+    selected_diff_off_value = QLabel()
+    diff_adjust_off_slider.valueChanged.connect(
+        lambda: selected_diff_off_value.setText(str(diff_adjust_off_slider.value()))
+    )
+
+    off_throttle_widgets = [
+        diff_adjust_off_label,
+        diff_adjust_off_slider,
+        selected_diff_off_value,
+    ]
+    for widget in on_throttle_widgets:
+        on_throttle_layout.addWidget(widget)
+    for widget in off_throttle_widgets:
+        off_throttle_layout.addWidget(widget)
+
+    transmission_page_layout.addLayout(on_throttle_layout)
+    transmission_page_layout.addLayout(off_throttle_layout)
+
+    return transmission_page
+
+
 def set_up_window(root):
     """
     This function sets up the window by adding the labels and widgets to enter
@@ -76,7 +126,9 @@ def set_up_window(root):
     setup_tabs = QTabWidget()
     root.setCentralWidget(setup_tabs)
     aero_tab = create_aero_tab()
+    transmission_tab = create_transmission_tab()
     setup_tabs.addTab(aero_tab, "Aerodynamics")
+    setup_tabs.addTab(transmission_tab, "Transmission")
     # notebook = Notebook(master=root, height=TAB_HEIGHT, width=TAB_WIDTH)
 
     # tabs for the different areas of setup
@@ -85,25 +137,6 @@ def set_up_window(root):
     # suspension_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # brakes_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # tires_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
-
-    # # transmission
-    # diff_adjust_on_label = Label(
-    #     master=transmission_tab, text="Differential Adjustment On Throttle (%)"
-    # )
-    # diff_adjust_on_input = tk.Scale(
-    #     master=transmission_tab, from_=50, to=100, orient="horizontal"
-    # )
-    # diff_adjust_on_label.pack()
-    # diff_adjust_on_input.pack()
-
-    # diff_adjust_off_label = Label(
-    #     master=transmission_tab, text="Differential Adjustment Off throttle"
-    # )
-    # diff_adjust_off_input = tk.Scale(
-    #     master=transmission_tab, from_=50, to=100, orient="horizontal"
-    # )
-    # diff_adjust_off_label.pack()
-    # diff_adjust_off_input.pack()
 
     # # suspension geometry
 

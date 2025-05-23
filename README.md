@@ -1,4 +1,4 @@
-# F1 Convert
+# ForVert - The F1 Setup Converter
 
 ---
 

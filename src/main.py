@@ -79,7 +79,7 @@ def create_transmission_tab():
     diff_adjust_on_slider.setMaximum(100)
     diff_adjust_on_slider.setMinimum(50)
 
-    selected_diff_on_value = QLabel()
+    selected_diff_on_value = QLabel(str(diff_adjust_on_slider.value()))
     diff_adjust_on_slider.valueChanged.connect(
         lambda: selected_diff_on_value.setText(str(diff_adjust_on_slider.value()))
     )
@@ -96,7 +96,7 @@ def create_transmission_tab():
     diff_adjust_off_slider = QSlider(Qt.Orientation.Horizontal)
     diff_adjust_off_slider.setMinimum(50)
     diff_adjust_off_slider.setMaximum(100)
-    selected_diff_off_value = QLabel()
+    selected_diff_off_value = QLabel(str(diff_adjust_off_slider.value()))
     diff_adjust_off_slider.valueChanged.connect(
         lambda: selected_diff_off_value.setText(str(diff_adjust_off_slider.value()))
     )
@@ -117,6 +117,107 @@ def create_transmission_tab():
     return transmission_page
 
 
+def create_suspension_geo_tab():
+    suspension_geo_page = QWidget()
+    suspension_geo_page_layout = QVBoxLayout()
+    suspension_geo_page.setLayout(suspension_geo_page_layout)
+
+    # layouts
+
+    front_camber_layout = QHBoxLayout()
+    rear_camber_layout = QHBoxLayout()
+    front_toe_layout = QHBoxLayout()
+    rear_toe_layout = QHBoxLayout()
+    layouts = []
+    layouts.append(front_camber_layout)
+    layouts.append(rear_camber_layout)
+    layouts.append(front_toe_layout)
+    layouts.append(rear_toe_layout)
+
+    for layout in layouts:
+        suspension_geo_page_layout.addLayout(layout)
+
+    # inputs:
+
+    # camber
+
+    front_camber_label = QLabel("Front Camber")
+    front_camber_slider = QSlider(Qt.Orientation.Horizontal)
+    front_camber_slider.setMinimum(-350)
+    front_camber_slider.setMaximum(-250)
+    selected_front_camber_value = QLabel(str(front_camber_slider.value() / 100))
+    front_camber_slider.valueChanged.connect(
+        lambda: selected_front_camber_value.setText(
+            str(front_camber_slider.value() / 100)
+        )
+    )
+
+    front_camber_widgets = [
+        front_camber_label,
+        front_camber_slider,
+        selected_front_camber_value,
+    ]
+
+    rear_camber_label = QLabel("Rear Camber")
+    rear_camber_slider = QSlider(Qt.Orientation.Horizontal)
+    rear_camber_slider.setMinimum(-350)
+    rear_camber_slider.setMaximum(-250)
+    selected_rear_camber_value = QLabel(str(rear_camber_slider.value() / 100))
+    rear_camber_slider.valueChanged.connect(
+        lambda: selected_rear_camber_value.setText(
+            str(rear_camber_slider.value() / 100)
+        )
+    )
+    rear_camber_widgets = [
+        rear_camber_label,
+        rear_camber_slider,
+        selected_rear_camber_value,
+    ]
+
+    for widget in front_camber_widgets:
+        front_camber_layout.addWidget(widget)
+    for widget in rear_camber_widgets:
+        rear_camber_layout.addWidget(widget)
+
+    #  toe
+    front_toe_label = QLabel("Front Toe")
+    front_toe_slider = QSlider(Qt.Orientation.Horizontal)
+    # maps to 0.05 to 0.15 but pyqt only supports int and +1 increment
+    front_toe_slider.setMinimum(5)
+    front_toe_slider.setMaximum(15)
+    selected_front_toe_value_label = QLabel(str(front_toe_slider.value() / 100))
+    front_toe_slider.valueChanged.connect(
+        lambda: selected_front_toe_value_label.setText(
+            str(front_toe_slider.value() / 100)
+        )
+    )
+    front_toe_widgets = [
+        front_toe_label,
+        front_toe_slider,
+        selected_front_toe_value_label,
+    ]
+
+    rear_toe_label = QLabel("Rear Toe")
+    rear_toe_slider = QSlider(Qt.Orientation.Horizontal)
+    rear_toe_slider.setMinimum(20)
+    rear_toe_slider.setMaximum(50)
+    # maps to 0.2 to 0.5 but pyqt only supports ints and +1 increments
+    selected_rear_toe_value_label = QLabel(str(rear_toe_slider.value() / 100))
+    rear_toe_slider.valueChanged.connect(
+        lambda: selected_rear_toe_value_label.setText(
+            str(rear_toe_slider.value() / 100)
+        )
+    )
+    rear_toe_widgets = [rear_toe_label, rear_toe_slider, selected_rear_toe_value_label]
+
+    for widget in front_toe_widgets:
+        front_toe_layout.addWidget(widget)
+    for widget in rear_toe_widgets:
+        rear_toe_layout.addWidget(widget)
+
+    return suspension_geo_page
+
+
 def set_up_window(root):
     """
     This function sets up the window by adding the labels and widgets to enter
@@ -127,63 +228,16 @@ def set_up_window(root):
     root.setCentralWidget(setup_tabs)
     aero_tab = create_aero_tab()
     transmission_tab = create_transmission_tab()
+    suspension_geometry_tab = create_suspension_geo_tab()
     setup_tabs.addTab(aero_tab, "Aerodynamics")
     setup_tabs.addTab(transmission_tab, "Transmission")
+    setup_tabs.addTab(suspension_geometry_tab, "Suspension Geometry")
     # notebook = Notebook(master=root, height=TAB_HEIGHT, width=TAB_WIDTH)
 
     # tabs for the different areas of setup
-    # suspension_geo_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # suspension_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # brakes_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # tires_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
-
-    # # suspension geometry
-
-    # # camber
-    # front_camber_label = Label(master=suspension_geo_tab, text="Front Camber")
-    # front_camber_slider = tk.Scale(
-    #     master=suspension_geo_tab,
-    #     from_=-3.50,
-    #     to=-2.50,
-    #     resolution=0.1,
-    #     orient="horizontal",
-    # )
-    # front_camber_label.pack()
-    # front_camber_slider.pack()
-
-    # rear_camber_label = Label(master=suspension_geo_tab, text="Rear Camber")
-    # rear_camber_slider = tk.Scale(
-    #     master=suspension_geo_tab,
-    #     from_=-3.50,
-    #     to=-2.5,
-    #     resolution=0.1,
-    #     orient="horizontal",
-    # )
-    # rear_camber_label.pack()
-    # rear_camber_slider.pack()
-
-    # # toe
-    # front_toe_label = Label(master=suspension_geo_tab, text="Front Toe")
-    # front_toe_slider = tk.Scale(
-    #     master=suspension_geo_tab,
-    #     orient="horizontal",
-    #     from_=0.05,
-    #     to=0.15,
-    #     resolution=0.01,
-    # )
-    # front_toe_label.pack()
-    # front_toe_slider.pack()
-
-    # rear_toe_label = Label(master=suspension_geo_tab, text="Rear Toe")
-    # rear_toe_slider = tk.Scale(
-    #     master=suspension_geo_tab,
-    #     orient="horizontal",
-    #     from_=0.20,
-    #     to=0.50,
-    #     resolution=0.01,
-    # )
-    # rear_toe_label.pack()
-    # rear_toe_slider.pack()
 
     # # Suspension
     # front_suspension_label = Label(

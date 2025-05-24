@@ -408,6 +408,55 @@ def create_brakes_tab():
     return brakes_page
 
 
+def create_tires_tab():
+    tires_page = QWidget()
+    # layouts
+    tires_page_layout = QVBoxLayout()
+    tires_page.setLayout(tires_page_layout)
+
+    front_tire_pressure_layout = QHBoxLayout()
+    rear_tire_pressure_layout = QHBoxLayout()
+
+    tires_page_layout.addLayout(front_tire_pressure_layout)
+    tires_page_layout.addLayout(rear_tire_pressure_layout)
+
+    # front tire pressure section
+    front_tp_label = QLabel("Front Tire Pressure")
+
+    front_tp_slider = QSlider(Qt.Orientation.Horizontal)
+    # PyQT only supports integer increments, so x10 for the min and max values
+    # in game the range is 21 -> 25, in the app the internal values are 210 -> 250
+    # so to map, when displaying the selected tire pressures, divide the answer by 10
+    # so an increment of 1 in the slider is "actually" an increment of 0.1, which
+    # reflects the behavior in F1 2019.
+    front_tp_slider.setMinimum(210)
+    front_tp_slider.setMaximum(250)
+    selected_front_tp_value_label = QLabel(str(front_tp_slider.value() / 10))
+    front_tp_slider.valueChanged.connect(
+        lambda: selected_front_tp_value_label.setText(str(front_tp_slider.value() / 10))
+    )
+    front_tp_widgets = [front_tp_label, front_tp_slider, selected_front_tp_value_label]
+
+    for widget in front_tp_widgets:
+        front_tire_pressure_layout.addWidget(widget)
+
+    # rear tires
+    rear_tp_label = QLabel("Rear Tire Pressure")
+    rear_tp_slider = QSlider(Qt.Orientation.Horizontal)
+    rear_tp_slider.setMinimum(195)
+    rear_tp_slider.setMaximum(235)
+    selected_rear_tp_value_label = QLabel(str(rear_tp_slider.value() / 10))
+    rear_tp_slider.valueChanged.connect(
+        lambda: selected_rear_tp_value_label.setText(str(rear_tp_slider.value() / 10))
+    )
+
+    rear_tp_widgets = [rear_tp_label, rear_tp_slider, selected_rear_tp_value_label]
+    for widget in rear_tp_widgets:
+        rear_tire_pressure_layout.addWidget(widget)
+
+    return tires_page
+
+
 def set_up_window(root):
     """
     This function sets up the window by adding the labels and widgets to enter
@@ -421,30 +470,14 @@ def set_up_window(root):
     transmission_tab = create_transmission_tab()
     suspension_geometry_tab = create_suspension_geo_tab()
     brakes_tab = create_brakes_tab()
+    tires_tab = create_tires_tab()
+
     setup_tabs.addTab(aero_tab, "Aerodynamics")
     setup_tabs.addTab(transmission_tab, "Transmission")
     setup_tabs.addTab(suspension_geometry_tab, "Suspension Geometry")
     setup_tabs.addTab(suspension_tab, "Suspension")
     setup_tabs.addTab(brakes_tab, "Brakes")
-
-    # TODO: convert these tabs to PyQt From TKinter
-    # tabs for the different areas of setup
-    # tires_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
-
-    # # Tires
-    # front_tp_label = Label(master=tires_tab, text="Front Tire Pressure")
-    # front_tp_input = tk.Scale(
-    #     master=tires_tab, from_=21, to=25, resolution=0.1, orient="horizontal"
-    # )
-    # front_tp_label.pack()
-    # front_tp_input.pack()
-
-    # rear_tp_label = Label(master=tires_tab, text="Rear Tire Pressure")
-    # rear_tp_input = tk.Scale(
-    #     master=tires_tab, from_=19.5, to=23.5, resolution=0.1, orient="horizontal"
-    # )
-    # rear_tp_label.pack()
-    # rear_tp_input.pack()
+    setup_tabs.addTab(tires_tab, "Tires")
 
     # b = tk.Button(
     #     master=root,

@@ -351,6 +351,63 @@ def create_suspension_tab():
     return suspension_page
 
 
+def create_brakes_tab():
+    # create the brakes page
+    brakes_page = QWidget()
+    # layout
+    brakes_page_layout = QVBoxLayout()
+    brakes_page.setLayout(brakes_page_layout)
+    brake_bias_layout = QHBoxLayout()
+    brake_pressure_layout = QHBoxLayout()
+
+    layouts = [brake_pressure_layout, brake_bias_layout]
+    for layout in layouts:
+        brakes_page_layout.addLayout(layout)
+
+    brake_pressure_label = QLabel("Brake Pressure %")
+    brake_pressure_slider = QSlider(Qt.Orientation.Horizontal)
+    brake_pressure_slider.setMinimum(50)
+    brake_pressure_slider.setMaximum(100)
+    selected_brake_pressure_value_label = QLabel(str(brake_pressure_slider.value()))
+    brake_pressure_slider.valueChanged.connect(
+        lambda: selected_brake_pressure_value_label.setText(
+            str(brake_pressure_slider.value())
+        )
+    )
+    brake_pressure_widgets = [
+        brake_pressure_label,
+        brake_pressure_slider,
+        selected_brake_pressure_value_label,
+    ]
+
+    for widget in brake_pressure_widgets:
+        brake_pressure_layout.addWidget(widget)
+
+    brakes_page_layout.addLayout(brake_pressure_layout)
+    brakes_page_layout.addLayout(brake_bias_layout)
+
+    brake_bias_label = QLabel("Brake Bias (Front ---  Rear) %")
+    brake_bias_slider = QSlider(Qt.Orientation.Horizontal)
+    brake_bias_slider.setMinimum(50)
+    brake_bias_slider.setMaximum(70)
+    brake_bias_slider.setInvertedAppearance(True)
+    selected_brake_bias_value_label = QLabel(str(brake_bias_slider.value()))
+    brake_bias_slider.valueChanged.connect(
+        lambda: selected_brake_bias_value_label.setText(str(brake_bias_slider.value()))
+    )
+
+    brake_bias_widgets = [
+        brake_bias_label,
+        brake_bias_slider,
+        selected_brake_bias_value_label,
+    ]
+
+    for widget in brake_bias_widgets:
+        brake_bias_layout.addWidget(widget)
+
+    return brakes_page
+
+
 def set_up_window(root):
     """
     This function sets up the window by adding the labels and widgets to enter
@@ -363,30 +420,16 @@ def set_up_window(root):
     suspension_tab = create_suspension_tab()
     transmission_tab = create_transmission_tab()
     suspension_geometry_tab = create_suspension_geo_tab()
+    brakes_tab = create_brakes_tab()
     setup_tabs.addTab(aero_tab, "Aerodynamics")
     setup_tabs.addTab(transmission_tab, "Transmission")
     setup_tabs.addTab(suspension_geometry_tab, "Suspension Geometry")
     setup_tabs.addTab(suspension_tab, "Suspension")
+    setup_tabs.addTab(brakes_tab, "Brakes")
 
     # TODO: convert these tabs to PyQt From TKinter
     # tabs for the different areas of setup
-    # brakes_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
     # tires_tab = Frame(master=notebook, width=WIDTH, height=HEIGHT)
-
-    # # Brakes
-    # brake_pressure_label = Label(master=brakes_tab, text="Brake Pressure")
-    # brake_pressure_input = tk.Scale(
-    #     master=brakes_tab, from_=50, to=100, resolution=1, orient="horizontal"
-    # )
-    # brake_pressure_label.pack()
-    # brake_pressure_input.pack()
-
-    # brake_bias_label = Label(master=brakes_tab, text="Brake Pressure (Front ---  Rear)")
-    # brake_bias_input = tk.Scale(
-    #     master=brakes_tab, from_=70, to=50, resolution=1, orient="horizontal"
-    # )
-    # brake_bias_label.pack()
-    # brake_bias_input.pack()
 
     # # Tires
     # front_tp_label = Label(master=tires_tab, text="Front Tire Pressure")
@@ -413,7 +456,7 @@ def set_up_window(root):
     return root
 
 
-# TODO: Convert conversion logic (lol convert conversion) to PyQT from Tkinter
+# TODO: Convert conversion logic to PyQT from Tkinter
 def getEntryWidgetsFromTabs(notebook):
     tabs = notebook.winfo_children()
     entries_by_setup_area = dict()

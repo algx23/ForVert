@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QHBoxLayout,
+    QPushButton,
 )
 from PyQt6.QtCore import Qt
 
@@ -457,14 +458,14 @@ def create_tires_tab():
     return tires_page
 
 
-def set_up_window(root):
+def set_up_window(root_layout):
     """
     This function sets up the window by adding the labels and widgets to enter
     the dry setup details
     """
 
     setup_tabs = QTabWidget()
-    root.setCentralWidget(setup_tabs)
+    root_layout.addWidget(setup_tabs)
     aero_tab = create_aero_tab()
     suspension_tab = create_suspension_tab()
     transmission_tab = create_transmission_tab()
@@ -479,14 +480,17 @@ def set_up_window(root):
     setup_tabs.addTab(brakes_tab, "Brakes")
     setup_tabs.addTab(tires_tab, "Tires")
 
-    # b = tk.Button(
-    #     master=root,
-    #     command=lambda: convert_and_display_setup(notebook, root),
-    #     text="Convert Setup",
-    # )
-    # b.pack()
+    convert_setup_button = QPushButton(text="Convert Setup")
+    convert_setup_button.setObjectName("convert button")
+    parent_containing_tabs = root_layout.parent()
+    root_layout.addWidget(convert_setup_button)
 
-    return root
+    # TODO: FIX so this function works correctly
+    convert_setup_button.clicked.connect(
+        getEntryWidgetsFromTabs(parent_containing_tabs)
+    )
+
+    return
 
 
 # TODO: Convert conversion logic to PyQT from Tkinter
@@ -692,10 +696,13 @@ def main():
 
     app = QApplication([])
     root = QMainWindow()
-    set_up_window(root)
+    root_widget = QWidget()
+    root_layout = QVBoxLayout()
+    root_widget.setLayout(root_layout)
+    set_up_window(root_layout)
+    root.setCentralWidget(root_widget)
     root.show()
     app.exec()
-    # root.mainloop()
 
 
 if __name__ == "__main__":

@@ -25,6 +25,7 @@ def create_aero_tab():
 
     front_wing_label = QLabel()
     front_wing_label.setText("Front Wing Aero")
+    front_wing_label.setObjectName("data_category")
     front_wing_slider = QSlider(Qt.Orientation.Horizontal)
     front_wing_slider.setMinimum(1)
     front_wing_slider.setMaximum(11)
@@ -37,6 +38,7 @@ def create_aero_tab():
 
     rear_wing_label = QLabel()
     rear_wing_label.setText("Rear Wing Aero")
+    rear_wing_label.setObjectName("data_category")
     rear_wing_slider = QSlider(Qt.Orientation.Horizontal)
     rear_wing_slider.setMinimum(1)
     rear_wing_slider.setMaximum(11)
@@ -76,6 +78,7 @@ def create_transmission_tab():
     # on throttle
     on_throttle_layout = QHBoxLayout()
     diff_adjust_on_label = QLabel("Differential Adjustment On Throttle (%)")
+    diff_adjust_on_label.setObjectName("data_category")
     diff_adjust_on_slider = QSlider(Qt.Orientation.Horizontal)
     diff_adjust_on_slider.setMaximum(100)
     diff_adjust_on_slider.setMinimum(50)
@@ -94,6 +97,7 @@ def create_transmission_tab():
     # off throttle
     off_throttle_layout = QHBoxLayout()
     diff_adjust_off_label = QLabel("Differential Adjustment Off throttle (%)")
+    diff_adjust_off_label.setObjectName("data_category")
     diff_adjust_off_slider = QSlider(Qt.Orientation.Horizontal)
     diff_adjust_off_slider.setMinimum(50)
     diff_adjust_off_slider.setMaximum(100)
@@ -143,6 +147,7 @@ def create_suspension_geo_tab():
     # camber
 
     front_camber_label = QLabel("Front Camber")
+    front_camber_label.setObjectName("data_category")
     front_camber_slider = QSlider(Qt.Orientation.Horizontal)
     front_camber_slider.setMinimum(-350)
     front_camber_slider.setMaximum(-250)
@@ -160,6 +165,7 @@ def create_suspension_geo_tab():
     ]
 
     rear_camber_label = QLabel("Rear Camber")
+    rear_camber_label.setObjectName("data_category")
     rear_camber_slider = QSlider(Qt.Orientation.Horizontal)
     rear_camber_slider.setMinimum(-350)
     rear_camber_slider.setMaximum(-250)
@@ -182,6 +188,7 @@ def create_suspension_geo_tab():
 
     #  toe
     front_toe_label = QLabel("Front Toe")
+    front_toe_label.setObjectName("data_category")
     front_toe_slider = QSlider(Qt.Orientation.Horizontal)
     # maps to 0.05 to 0.15 but pyqt only supports int and +1 increment
     front_toe_slider.setMinimum(5)
@@ -199,6 +206,7 @@ def create_suspension_geo_tab():
     ]
 
     rear_toe_label = QLabel("Rear Toe")
+    rear_toe_label.setObjectName("data_category")
     rear_toe_slider = QSlider(Qt.Orientation.Horizontal)
     rear_toe_slider.setMinimum(20)
     rear_toe_slider.setMaximum(50)
@@ -255,6 +263,7 @@ def create_suspension_tab():
 
     # Suspension
     front_suspension_label = QLabel("Front Suspension (soft - firm)")
+    front_suspension_label.setObjectName("data_category")
     front_suspension_slider = QSlider(Qt.Orientation.Horizontal)
     selected_front_suspension_value_label = QLabel(str(front_suspension_slider.value()))
     front_suspension_slider.valueChanged.connect(
@@ -273,6 +282,7 @@ def create_suspension_tab():
     # rear suspension
 
     rear_suspension_label = QLabel("Rear Suspension (soft - firm)")
+    rear_suspension_label.setObjectName("data_category")
     rear_suspension_slider = QSlider(Qt.Orientation.Horizontal)
     selected_rear_suspension_value_label = QLabel(str(rear_suspension_slider.value()))
     rear_suspension_slider.valueChanged.connect(
@@ -294,6 +304,7 @@ def create_suspension_tab():
 
     # front anti roll bar
     front_arb_label = QLabel("Front Anti Roll Bar")
+    front_arb_label.setObjectName("data_category")
     front_arb_slider = QSlider(Qt.Orientation.Horizontal)
     sliders.append(front_arb_slider)
     selected_front_arb_value_label = QLabel(str(front_arb_slider.value()))
@@ -310,6 +321,7 @@ def create_suspension_tab():
 
     # rear anti roll bar
     rear_arb_label = QLabel("Rear Anti Roll Bar")
+    rear_arb_label.setObjectName("data_category")
     rear_arb_slider = QSlider(Qt.Orientation.Horizontal)
     sliders.append(rear_arb_slider)
     selected_rear_arb_value_label = QLabel(str(rear_arb_slider.value()))
@@ -322,6 +334,7 @@ def create_suspension_tab():
 
     # front ride height
     front_rh_label = QLabel("Front Ride Height")
+    front_rh_label.setObjectName("data_category")
     front_rh_slider = QSlider(Qt.Orientation.Horizontal)
     sliders.append(front_rh_slider)
     selected_front_rh_value_label = QLabel(str(front_rh_slider.value()))
@@ -335,6 +348,7 @@ def create_suspension_tab():
 
     # rear ride height
     rear_rh_label = QLabel("Rear Ride Height")
+    rear_rh_label.setObjectName("data_category")
     rear_rh_slider = QSlider(Qt.Orientation.Horizontal)
     sliders.append(rear_rh_slider)
     selected_rear_rh_value_label = QLabel(str(rear_rh_slider.value()))
@@ -366,6 +380,7 @@ def create_brakes_tab():
         brakes_page_layout.addLayout(layout)
 
     brake_pressure_label = QLabel("Brake Pressure %")
+    brake_pressure_label.setObjectName("data_category")
     brake_pressure_slider = QSlider(Qt.Orientation.Horizontal)
     brake_pressure_slider.setMinimum(50)
     brake_pressure_slider.setMaximum(100)
@@ -388,6 +403,7 @@ def create_brakes_tab():
     brakes_page_layout.addLayout(brake_bias_layout)
 
     brake_bias_label = QLabel("Brake Bias (Front ---  Rear) %")
+    brake_bias_label.setObjectName("data_category")
     brake_bias_slider = QSlider(Qt.Orientation.Horizontal)
     brake_bias_slider.setMinimum(50)
     brake_bias_slider.setMaximum(70)
@@ -423,6 +439,7 @@ def create_tires_tab():
 
     # front tire pressure section
     front_tp_label = QLabel("Front Tire Pressure")
+    front_tp_label.setObjectName("data_category")
 
     front_tp_slider = QSlider(Qt.Orientation.Horizontal)
     # PyQT only supports integer increments, so x10 for the min and max values
@@ -443,6 +460,7 @@ def create_tires_tab():
 
     # rear tires
     rear_tp_label = QLabel("Rear Tire Pressure")
+    rear_tp_label.setObjectName("data_category")
     rear_tp_slider = QSlider(Qt.Orientation.Horizontal)
     rear_tp_slider.setMinimum(195)
     rear_tp_slider.setMaximum(235)
@@ -485,30 +503,69 @@ def set_up_window(root_layout):
     parent_containing_tabs = root_layout.parent()
     root_layout.addWidget(convert_setup_button)
 
-    # TODO: FIX so this function works correctly
     convert_setup_button.clicked.connect(
-        getEntryWidgetsFromTabs(parent_containing_tabs)
+        lambda: get_layouts_of_tabs(parent_containing_tabs)
     )
 
     return
 
 
-# TODO: Convert conversion logic to PyQT from Tkinter
-def getEntryWidgetsFromTabs(notebook):
-    tabs = notebook.winfo_children()
-    entries_by_setup_area = dict()
+def get_layouts_of_tabs(widget_containing_tw):
+    """This function takes in the layout of the window, and creates a dictionary tracking the name
+    of each tab, and the layouts within it. This result of this function is going to be used in a
+    get_data_from_tabs() function which will extract the data from the layouts, to use in conversion
 
-    # {aeordynamics/transmission/... : [scale_widgets]}
-    for i in range(len(tabs)):
-        tab_title = notebook.tab(i, "text")
-        widgets_in_tab = tabs[i].winfo_children()
-        entries_by_setup_area[tab_title] = []
+    Args:
+        widget_containing_tw (QWidget): this is the widget of the root window, contianing a vbox layout,
+                                            which contains the TabWidget, and the convert setup button
 
-        for widget in widgets_in_tab:
-            if isinstance(widget, tk.Scale):
-                entries_by_setup_area[tab_title].append(widget.get())
+    Returns:
+        dict: Returns a dictionairy containing the title of the tab, and the layouts within that tab. Each
+              layout will hold the labels and sliders of that "section".
+    """
+    tabs_and_layouts = {}
+    widgets_in_parent = (
+        widget_containing_tw.children()
+    )  # this is the QWidget of the parent window -> so the tabbar, the vbox layout of the tabs, and the button
+    # print(f"widgets: {widgets_in_parent}")
+    for i in range(len(widgets_in_parent)):
+        if isinstance(
+            widgets_in_parent[i], QTabWidget
+        ):  # find the tab widget in the list of widgets
+            tab_widget = widgets_in_parent[i]
 
-    return entries_by_setup_area
+    tabs = []
+    print(f"tab widget: {tab_widget}")
+    for index in range(
+        tab_widget.count()
+    ):  # in each tab there is a QWidget which holds all the layouts which hold the sliders labels etc
+        # print(f"individual tab widget: {tab_widget.widget(index)}")
+        tabs.append(
+            tab_widget.widget(index)
+        )  # add the widget of the tab to the list of tabs
+
+    for index in range(len(tabs)):
+        all_widgets_in_tab = []
+        tab = tabs[index]
+        tab_title = tab_widget.tabText(index)
+        for j in range(tab.layout().count()):
+            item_inside_tab = tab.layout().itemAt(j)  # things inside the layout
+            if item_inside_tab.layout():
+                all_widgets_in_tab.append(item_inside_tab.layout())
+        tabs_and_layouts[tab_title] = all_widgets_in_tab
+
+    print(tabs_and_layouts)
+    for title, num_layouts in tabs_and_layouts.items():
+        print(
+            f"tab: {title}, number of layouts: {len(num_layouts)}"
+        )  # each layout is a setup area you can change e.g. front and rear brake pressure are in 2 layouts
+
+    return tabs_and_layouts
+
+
+# TODO: Implement this function to get data from the layouts of the tabs
+def get_data_from_tab_layouts(tabs_and_layouts):
+    pass
 
 
 def update_aerodynamics(init_aero_vals):

@@ -568,6 +568,7 @@ def get_data_from_tab_layouts(tabs_and_layouts):
     pass
 
 
+# TODO: Implement conversion logic with the new UI when ready
 def update_aerodynamics(init_aero_vals):
     front_wing = init_aero_vals[0]
     rear_wing = init_aero_vals[1]

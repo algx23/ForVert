@@ -527,7 +527,7 @@ def get_layouts_of_tabs(widget_containing_tw):
     widgets_in_parent = (
         widget_containing_tw.children()
     )  # this is the QWidget of the parent window -> so the tabbar, the vbox layout of the tabs, and the button
-    # print(f"widgets: {widgets_in_parent}")
+
     for i in range(len(widgets_in_parent)):
         if isinstance(
             widgets_in_parent[i], QTabWidget
@@ -535,11 +535,9 @@ def get_layouts_of_tabs(widget_containing_tw):
             tab_widget = widgets_in_parent[i]
 
     tabs = []
-    print(f"tab widget: {tab_widget}")
     for index in range(
         tab_widget.count()
     ):  # in each tab there is a QWidget which holds all the layouts which hold the sliders labels etc
-        # print(f"individual tab widget: {tab_widget.widget(index)}")
         tabs.append(
             tab_widget.widget(index)
         )  # add the widget of the tab to the list of tabs
@@ -554,17 +552,55 @@ def get_layouts_of_tabs(widget_containing_tw):
                 all_widgets_in_tab.append(item_inside_tab.layout())
         tabs_and_layouts[tab_title] = all_widgets_in_tab
 
-    print(tabs_and_layouts)
-    for title, num_layouts in tabs_and_layouts.items():
-        print(
-            f"tab: {title}, number of layouts: {len(num_layouts)}"
-        )  # each layout is a setup area you can change e.g. front and rear brake pressure are in 2 layouts
-
-    return tabs_and_layouts
+    get_data_from_tab_layouts(tabs_and_layouts)
+    return
 
 
-# TODO: Implement this function to get data from the layouts of the tabs
 def get_data_from_tab_layouts(tabs_and_layouts):
+
+    setup_values = {}
+    for title in tabs_and_layouts.keys():  # loop through each major setup "section"
+        setup_values[title] = (
+            {}
+        )  # empty dict for the values of the setup areas in a section
+        layouts = tabs_and_layouts[title]  # the layouts in each tab
+        # print(layouts)
+        for index in range(len(layouts)):
+            child_layout = layouts[index]
+
+            # Each layout holds a category name, e.g. "Front Wing Aero", as a label, and a value for that
+            # category, in a slider. For each layout (so set up value that can be changed), iterate
+            # through the widgets. If the widget is a QLabel and has the name "data_category", it is
+            # the name of a category of the setup that can be changed, e.g. "Front Wing Aero".
+            # If the widget is a QSlider, it holds the value that you selected for that set up item.
+            # If the data category, and value are found (i.e not "" and not 0 respectively) then you can
+            # add the category name, and the value associated with that,
+            # to the dict, for the overall SETUP category -> E.g. "Aerodynamics", "Transmission" etc.
+            # This means we can hold the category name, and value, for each overall setup area, e.g.
+            # "Aerodynamics": front wing aero: 1, rear wing aero: 2
+            data_category = ""
+            value_of_category = 0
+            for other_index in range(child_layout.count()):
+                widget_in_layout = child_layout.itemAt(other_index).widget()
+                if (
+                    isinstance(widget_in_layout, QLabel)
+                    and widget_in_layout.objectName() == "data_category"
+                ):
+                    # print(widget_in_layout.text())
+                    data_category = widget_in_layout.text()
+                elif isinstance(widget_in_layout, QSlider):
+                    # print(f"slider value : {widget_in_layout.value()}")
+                    value_of_category = widget_in_layout.value()
+            if data_category != "" and value_of_category != 0:
+                setup_values[title][data_category] = value_of_category
+
+    print(setup_values)
+    return setup_values
+
+
+# TODO: use this function to map certain slider values from those accepted by PyQT to the actual game
+# - eg -2.50 rather than -250 for front camber
+def map_slider_values(setup_values):
     pass
 
 

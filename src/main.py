@@ -594,14 +594,26 @@ def get_data_from_tab_layouts(tabs_and_layouts):
             if data_category != "" and value_of_category != 0:
                 setup_values[title][data_category] = value_of_category
 
-    print(setup_values)
+    suspension_geo_to_map = list(setup_values["Suspension Geometry"].values())
+    mapped_sus_values = map_slider_values(
+        suspension_geo_to_map, factor=0.01
+    )  # the values for suspension geometry needs to be divided by 100
+
+    tp_to_map = list(setup_values["Tires"].values())
+    # tire pressure values need to be divided by 10
+    mapped_tp_values = map_slider_values(tp_to_map, factor=0.1)
+
+    print(f"mapped suspension values: {mapped_sus_values}")
+    print(f"mapped tire pressure values: {mapped_tp_values}")
+
     return setup_values
 
 
-# TODO: use this function to map certain slider values from those accepted by PyQT to the actual game
-# - eg -2.50 rather than -250 for front camber
-def map_slider_values(setup_values):
-    pass
+def map_slider_values(setup_values: list[int], factor: int):
+    for i in range(len(setup_values)):
+        setup_values[i] *= factor
+
+    return setup_values
 
 
 # TODO: Implement conversion logic with the new UI when ready

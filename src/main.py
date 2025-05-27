@@ -504,7 +504,8 @@ def set_up_window(root_layout):
     root_layout.addWidget(convert_setup_button)
 
     convert_setup_button.clicked.connect(
-        lambda: get_layouts_of_tabs(parent_containing_tabs)
+        # TODO: This doesnt work, figure out how to display a new window
+        lambda: convert_and_display_setup(parent_containing_tabs, None)
     )
 
     return
@@ -552,8 +553,7 @@ def get_layouts_of_tabs(widget_containing_tw):
                 all_widgets_in_tab.append(item_inside_tab.layout())
         tabs_and_layouts[tab_title] = all_widgets_in_tab
 
-    get_data_from_tab_layouts(tabs_and_layouts)
-    return
+    return tabs_and_layouts
 
 
 def get_data_from_tab_layouts(tabs_and_layouts):
@@ -598,7 +598,6 @@ def get_data_from_tab_layouts(tabs_and_layouts):
 
     # tire pressure values need to be divided by 10
     map_slider_values(setup_values["Tires"], factor=0.1)
-    print(f"after : {setup_values}")
 
     return setup_values
 
@@ -613,8 +612,8 @@ def map_slider_values(section_to_map: dict, factor: float):
 
 # TODO: Implement conversion logic with the new UI when ready
 def update_aerodynamics(init_aero_vals):
-    front_wing = init_aero_vals[0]
-    rear_wing = init_aero_vals[1]
+    front_wing = init_aero_vals["Front Wing Aero"]
+    rear_wing = init_aero_vals["Rear Wing Aero"]
 
     if front_wing + 2 < 11:
         front_wing += 2
@@ -624,8 +623,10 @@ def update_aerodynamics(init_aero_vals):
 
 
 def update_transmission(init_transmission_vals):
-    diff_on_throttle = init_transmission_vals[0]
-    diff_off_throttle = init_transmission_vals[1]
+    diff_on_throttle = init_transmission_vals["Differential Adjustment On Throttle (%)"]
+    diff_off_throttle = init_transmission_vals[
+        "Differential Adjustment Off throttle (%)"
+    ]
 
     diff_on_throttle = 50
     if diff_off_throttle >= 70:
@@ -634,10 +635,10 @@ def update_transmission(init_transmission_vals):
 
 
 def update_suspension_geometry(init_sg_vals):
-    front_camber = init_sg_vals[0]
-    rear_camber = init_sg_vals[1]
-    front_toe = init_sg_vals[2]
-    rear_toe = init_sg_vals[3]
+    front_camber = init_sg_vals["Front Camber"]
+    rear_camber = init_sg_vals["Rear Camber"]
+    front_toe = init_sg_vals["Front Toe"]
+    rear_toe = init_sg_vals["Rear Toe"]
 
     if rear_camber > -3.5:
         rear_camber -= 0.1
@@ -645,12 +646,12 @@ def update_suspension_geometry(init_sg_vals):
 
 
 def update_suspension(init_suspension_val):
-    front_suspension = init_suspension_val[0]
-    rear_suspension = init_suspension_val[1]
-    front_arb = init_suspension_val[2]
-    rear_arb = init_suspension_val[3]
-    front_rh = init_suspension_val[4]
-    rear_rh = init_suspension_val[5]
+    front_suspension = init_suspension_val["Front Suspension (soft - firm)"]
+    rear_suspension = init_suspension_val["Rear Suspension (soft - firm)"]
+    front_arb = init_suspension_val["Front Anti Roll Bar"]
+    rear_arb = init_suspension_val["Rear Anti Roll Bar"]
+    front_rh = init_suspension_val["Front Ride Height"]
+    rear_rh = init_suspension_val["Rear Ride Height"]
 
     if front_suspension > 5:
         front_suspension -= 2
@@ -680,8 +681,8 @@ def update_suspension(init_suspension_val):
 
 
 def update_brakes(init_brake_vals):
-    brake_pressure = init_brake_vals[0]
-    brake_bias = init_brake_vals[1]
+    brake_pressure = init_brake_vals["Brake Pressure %"]
+    brake_bias = init_brake_vals["Brake Bias (Front ---  Rear) %"]
 
     brake_pressure = 89
     brake_bias = 52 if brake_bias >= 53 else brake_bias
@@ -689,8 +690,8 @@ def update_brakes(init_brake_vals):
 
 
 def update_tires(init_tire_pressures):
-    front_tire_pressure = init_tire_pressures[0]
-    rear_tire_pressure = init_tire_pressures[1]
+    front_tire_pressure = init_tire_pressures["Front Tire Pressure"]
+    rear_tire_pressure = init_tire_pressures["Rear Tire Pressure"]
 
     front_tire_pressure -= 0.1
     rear_tire_pressure -= 0.1
@@ -700,12 +701,13 @@ def update_tires(init_tire_pressures):
     return (front_tire_pressure, rear_tire_pressure)
 
 
-def convertSetup(notebook):
+def convert_setup(widget_containing_tw):
     """
     This function will take the values entered, and on a button press, convert the values,
     which should be for a dry setup, into generally suitable values for a wet track
     """
-    widgets = getEntryWidgetsFromTabs(notebook)
+    layouts = get_layouts_of_tabs(widget_containing_tw=widget_containing_tw)
+    setup_vals = get_data_from_tab_layouts(layouts)
 
     #################################
     # Update key index => tab title
@@ -719,14 +721,14 @@ def convertSetup(notebook):
 
     result_dict = dict()
 
-    new_aero_values = update_aerodynamics(widgets["Aerodynamics"])
-    new_transmission_values = update_transmission(widgets["Transmission"])
+    new_aero_values = update_aerodynamics(setup_vals["Aerodynamics"])
+    new_transmission_values = update_transmission(setup_vals["Transmission"])
     new_suspension_geometry_values = update_suspension_geometry(
-        widgets["Suspension Geometry"]
+        setup_vals["Suspension Geometry"]
     )
-    new_suspension_values = update_suspension(widgets["Suspension"])
-    new_brake_values = update_brakes(widgets["Brakes"])
-    new_tire_pressure_values = update_tires(widgets["Tires"])
+    new_suspension_values = update_suspension(setup_vals["Suspension"])
+    new_brake_values = update_brakes(setup_vals["Brakes"])
+    new_tire_pressure_values = update_tires(setup_vals["Tires"])
 
     # build the dict
     result_dict["Aerodynamics"] = {
@@ -764,7 +766,11 @@ def convertSetup(notebook):
 
 
 def convert_and_display_setup(page_w_existing_setup, window_to_display_on):
-    new_setup = convertSetup(page_w_existing_setup)
+    new_setup = convert_setup(page_w_existing_setup)
+    print(new_setup)
+    return  # return early because the displaying of the info does not work
+
+    # TODO: FIX THIS STUFF
     new_setup_window = tk.Toplevel(window_to_display_on)
     new_setup_window.title("Converted Setup")
 

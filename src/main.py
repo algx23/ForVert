@@ -564,7 +564,6 @@ def get_data_from_tab_layouts(tabs_and_layouts):
             {}
         )  # empty dict for the values of the setup areas in a section
         layouts = tabs_and_layouts[title]  # the layouts in each tab
-        # print(layouts)
         for index in range(len(layouts)):
             child_layout = layouts[index]
 
@@ -594,26 +593,22 @@ def get_data_from_tab_layouts(tabs_and_layouts):
             if data_category != "" and value_of_category != 0:
                 setup_values[title][data_category] = value_of_category
 
-    suspension_geo_to_map = list(setup_values["Suspension Geometry"].values())
-    mapped_sus_values = map_slider_values(
-        suspension_geo_to_map, factor=0.01
-    )  # the values for suspension geometry needs to be divided by 100
+    # the values for suspension geometry needs to be divided by 100
+    map_slider_values(setup_values["Suspension Geometry"], factor=0.01)
 
-    tp_to_map = list(setup_values["Tires"].values())
     # tire pressure values need to be divided by 10
-    mapped_tp_values = map_slider_values(tp_to_map, factor=0.1)
-
-    print(f"mapped suspension values: {mapped_sus_values}")
-    print(f"mapped tire pressure values: {mapped_tp_values}")
+    map_slider_values(setup_values["Tires"], factor=0.1)
+    print(f"after : {setup_values}")
 
     return setup_values
 
 
-def map_slider_values(setup_values: list[int], factor: int):
-    for i in range(len(setup_values)):
-        setup_values[i] *= factor
+def map_slider_values(section_to_map: dict, factor: float):
+    # map the values
+    for key in section_to_map:
+        section_to_map[key] *= factor
 
-    return setup_values
+    return
 
 
 # TODO: Implement conversion logic with the new UI when ready

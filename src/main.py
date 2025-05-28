@@ -505,7 +505,7 @@ def set_up_window(root_layout):
 
     convert_setup_button.clicked.connect(
         # TODO: This doesnt work, figure out how to display a new window
-        lambda: convert_and_display_setup(parent_containing_tabs, None)
+        lambda: display_new_setup(parent_containing_tabs, None)
     )
 
     return
@@ -765,7 +765,7 @@ def convert_setup(widget_containing_tw):
     return result_dict
 
 
-def convert_and_display_setup(page_w_existing_setup, window_to_display_on):
+def display_new_setup(page_w_existing_setup, window_to_display_on):
     new_setup = convert_setup(page_w_existing_setup)
     print(new_setup)
     return  # return early because the displaying of the info does not work

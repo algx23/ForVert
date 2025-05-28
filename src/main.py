@@ -76,8 +76,8 @@ def set_up_window():
     rear_camber_label = Label(master=suspension_geo_tab, text="Rear Camber")
     rear_camber_slider = tk.Scale(
         master=suspension_geo_tab,
-        from_=-3.50,
-        to=-2.5,
+        from_=-2,
+        to=-1.0,
         resolution=0.1,
         orient="horizontal",
     )
@@ -246,7 +246,8 @@ def update_suspension_geometry(init_sg_vals):
     front_toe = init_sg_vals[2]
     rear_toe = init_sg_vals[3]
 
-    if rear_camber > -3.5:
+    # check that you don't go over the limit when changing the rear camber
+    if rear_camber - 0.1 <= -2.0:
         rear_camber -= 0.1
     return (front_camber, rear_camber, front_toe, rear_toe)
 

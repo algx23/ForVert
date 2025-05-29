@@ -504,7 +504,6 @@ def set_up_window(root_layout):
 
     convert_setup_button = QPushButton(text="Convert Setup")
     convert_setup_button.setObjectName("convert button")
-    parent_containing_tabs = root_layout.parent()
     root_layout.addWidget(convert_setup_button)
 
     return
@@ -712,16 +711,6 @@ def convert_setup(widget_containing_tw):
     layouts = get_layouts_of_tabs(widget_containing_tw=widget_containing_tw)
     setup_vals = get_data_from_tab_layouts(layouts)
 
-    #################################
-    # Update key index => tab title
-    # 0 => Aero
-    # 1 => Transmission
-    # 2 => Suspension Geometry
-    # 3 => Suspension
-    # 4 => Brakes
-    # 5 => Tires
-    #################################
-
     result_dict = dict()
 
     new_aero_values = update_aerodynamics(setup_vals["Aerodynamics"])
@@ -840,11 +829,9 @@ def main():
     root_layout = QVBoxLayout()
     root_widget.setLayout(root_layout)
     set_up_window(root_layout)
-    root.setCentralWidget(stacked_widget)
     stacked_widget.addWidget(root_widget)
 
     stacked_widget.setCurrentWidget(root_widget)
-    # stacked_widget.show()
 
     # if the convert button is clicked
     converted_setup_window = display_converted_setup(root_widget)
@@ -854,7 +841,7 @@ def main():
         lambda: stacked_widget.setCurrentWidget(converted_setup_window)
     )
 
-    # if the back button is pressed, on teh converted setup page
+    # if the back button is pressed, on the converted setup page
     back_to_setup_input = find_back_button(converted_setup_window)
     back_to_setup_input.clicked.connect(
         lambda: stacked_widget.setCurrentWidget(root_widget)

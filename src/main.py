@@ -449,6 +449,7 @@ def create_tires_tab():
     # reflects the behavior in F1 2019.
     front_tp_slider.setMinimum(210)
     front_tp_slider.setMaximum(250)
+    front_tp_slider.setSingleStep(4)
     selected_front_tp_value_label = QLabel(str(front_tp_slider.value() / 10))
     front_tp_slider.valueChanged.connect(
         lambda: selected_front_tp_value_label.setText(str(front_tp_slider.value() / 10))
@@ -464,6 +465,7 @@ def create_tires_tab():
     rear_tp_slider = QSlider(Qt.Orientation.Horizontal)
     rear_tp_slider.setMinimum(195)
     rear_tp_slider.setMaximum(235)
+    rear_tp_slider.setSingleStep(4)
     selected_rear_tp_value_label = QLabel(str(rear_tp_slider.value() / 10))
     rear_tp_slider.valueChanged.connect(
         lambda: selected_rear_tp_value_label.setText(str(rear_tp_slider.value() / 10))
@@ -693,11 +695,15 @@ def update_tires(init_tire_pressures):
     front_tire_pressure = init_tire_pressures["Front Tire Pressure"]
     rear_tire_pressure = init_tire_pressures["Rear Tire Pressure"]
 
-    front_tire_pressure -= 0.1
-    rear_tire_pressure -= 0.1
+    front_tire_pressure -= 0.4
+    rear_tire_pressure -= 0.8
 
-    front_tire_pressure = 21 if front_tire_pressure < 21 else front_tire_pressure
-    rear_tire_pressure = 19.5 if rear_tire_pressure < 19.5 else rear_tire_pressure
+    front_tire_pressure = (
+        21 if front_tire_pressure < 21 else round(front_tire_pressure, 1)
+    )
+    rear_tire_pressure = (
+        19.5 if rear_tire_pressure < 19.5 else round(rear_tire_pressure, 1)
+    )
     return (front_tire_pressure, rear_tire_pressure)
 
 

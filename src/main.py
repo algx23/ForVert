@@ -172,14 +172,14 @@ def set_up_window():
     # Tires
     front_tp_label = Label(master=tires_tab, text="Front Tire Pressure")
     front_tp_input = tk.Scale(
-        master=tires_tab, from_=21, to=25, resolution=0.1, orient="horizontal"
+        master=tires_tab, from_=21, to=25, resolution=0.4, orient="horizontal"
     )
     front_tp_label.pack()
     front_tp_input.pack()
 
     rear_tp_label = Label(master=tires_tab, text="Rear Tire Pressure")
     rear_tp_input = tk.Scale(
-        master=tires_tab, from_=19.5, to=23.5, resolution=0.1, orient="horizontal"
+        master=tires_tab, from_=19.5, to=23.5, resolution=0.4, orient="horizontal"
     )
     rear_tp_label.pack()
     rear_tp_input.pack()
@@ -300,11 +300,15 @@ def update_tires(init_tire_pressures):
     front_tire_pressure = init_tire_pressures[0]
     rear_tire_pressure = init_tire_pressures[1]
 
-    front_tire_pressure -= 0.1
-    rear_tire_pressure -= 0.1
+    front_tire_pressure -= 0.4
+    rear_tire_pressure -= 0.8  # lower rear tire pressure by 2pts
 
-    front_tire_pressure = 21 if front_tire_pressure < 21 else front_tire_pressure
-    rear_tire_pressure = 19.5 if rear_tire_pressure < 19.5 else rear_tire_pressure
+    front_tire_pressure = (
+        21 if front_tire_pressure < 21 else round(front_tire_pressure, 1)
+    )
+    rear_tire_pressure = (
+        19.5 if rear_tire_pressure < 19.5 else round(rear_tire_pressure, 1)
+    )
     return (front_tire_pressure, rear_tire_pressure)
 
 

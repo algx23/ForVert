@@ -8,6 +8,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QPushButton,
+    QFrame,
+    QStackedWidget,
 )
 from PyQt6.QtCore import Qt
 
@@ -766,53 +768,100 @@ def convert_setup(widget_containing_tw):
     return result_dict
 
 
-def display_new_setup(page_w_existing_setup, window_to_display_on):
+def create_converted_setup_window():
+    new_window_widget = QWidget()
+    new_window_layout = QVBoxLayout()
+    new_window_widget.setLayout(new_window_layout)
+    back_to_conversion_button = QPushButton("Back to Enter Setup")
+    back_to_conversion_button.setObjectName("new_setup_back_to_enter_button")
+
+    new_window_layout.addWidget(back_to_conversion_button)
+
+    return new_window_widget
+
+
+def display_converted_setup(page_w_existing_setup):
     new_setup = convert_setup(page_w_existing_setup)
     print(new_setup)
-    return  # return early because the displaying of the info does not work
 
-    # TODO: FIX THIS STUFF
-    new_setup_window = tk.Toplevel(window_to_display_on)
-    new_setup_window.title("Converted Setup")
+    new_setup_window = create_converted_setup_window()
+    new_setup_window.setWindowTitle("Converted Setup")
+    new_setup_win_layout = new_setup_window.layout()
 
     # {setup_area : setup_item}
     # in setup_item => {setup_item_name : setup_item_value, ..}
     # eg: {"Aerodynamics" : {Front wing: 1, Rear wing: 2, ..}}
     for setup_area, setup_item in new_setup.items():
-        area_frame = Frame(master=new_setup_window, width=500, height=500)
-        area_frame.pack(pady=20)
-        setup_area_label = Label(master=area_frame, text=setup_area)
-        setup_area_label.pack()
-        for setup_item_name, setup_item_value in setup_item.items():
-            item_frame = Frame(master=area_frame, width=1000, height=1000)
-            item_frame.pack(side="left", padx=10, pady=10)
-            setup_item_name_label = Label(
-                master=item_frame, text=str(setup_item_name) + ": "
-            )
-            setup_item_value_label = Label(
-                master=item_frame, text=str(setup_item_value)
-            )
-            setup_item_name_label.pack(side="left")
-            setup_item_value_label.pack(side="left")
+        area_frame = QFrame(new_setup_window)
+        area_layout = QVBoxLayout()
+        area_frame.setLayout(area_layout)
 
-    label = Label(master=new_setup_window)
-    label.pack()
-    return
+        setup_area_label = QLabel(setup_area)
+        area_layout.addWidget(setup_area_label)
+
+        # The setup values under each section, eg front wing aero, rear wing aero
+        item_frame_layout = QHBoxLayout()
+        for setup_item_name, setup_item_value in setup_item.items():
+            item_frame = QFrame(area_frame)
+            item_frame.setLayout(item_frame_layout)
+
+            item_name_text = str(setup_item_name) + ": "
+            setup_item_name_label = QLabel(item_name_text)
+
+            setup_item_value_label = QLabel(str(setup_item_value))
+
+            item_frame_layout.addWidget(setup_item_name_label)
+            item_frame_layout.addWidget(setup_item_value_label)
+
+            area_layout.addWidget(item_frame)
+        new_setup_win_layout.addWidget(area_frame)
+
+    return new_setup_window
+
+
+def find_back_button(converted_setup_window_widget):
+    back_button = None
+    widgets = converted_setup_window_widget.children()
+    for w in widgets:
+        if (
+            isinstance(w, QPushButton)
+            and w.objectName() == "new_setup_back_to_enter_button"
+        ):
+            back_button = w
+    return back_button
 
 
 def main():
 
     app = QApplication([])
     root = QMainWindow()
+    stacked_widget = QStackedWidget()
     root_widget = QWidget()
     root_layout = QVBoxLayout()
     root_widget.setLayout(root_layout)
     set_up_window(root_layout)
-    root.setCentralWidget(root_widget)
-    root.show()
+    root.setCentralWidget(stacked_widget)
+    stacked_widget.addWidget(root_widget)
 
+    stacked_widget.setCurrentWidget(root_widget)
+    # stacked_widget.show()
+
+    # if the convert button is clicked
+    converted_setup_window = display_converted_setup(root_widget)
+    stacked_widget.addWidget(converted_setup_window)
     convert_button = root_widget.findChild(QPushButton, name="convert button")
-    convert_button.clicked.connect(lambda: display_new_setup(root_widget, None))
+    convert_button.clicked.connect(
+        lambda: stacked_widget.setCurrentWidget(converted_setup_window)
+    )
+
+    # if the back button is pressed, on teh converted setup page
+    back_to_setup_input = find_back_button(converted_setup_window)
+    back_to_setup_input.clicked.connect(
+        lambda: stacked_widget.setCurrentWidget(root_widget)
+    )
+
+    root.setCentralWidget(stacked_widget)
+    root.show()
 
     app.exec()
 

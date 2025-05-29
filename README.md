@@ -41,8 +41,6 @@ This is an application which will convert your dry F1 Game setups to wet setups!
 
 ## :construction: In the works :construction:
 
-:red_circle: **BUG**: The ranges for tire pressures and increments are not as expected in-game. I am working on a fix for this at the moment!
-
 :hourglass_flowing_sand: The time scale for these features is unknown. I will try push them out as regularly as I can.
 
 There are some features which I am considering developing, to take this from a simple F1 Game Setup Converter to a full companion.

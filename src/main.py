@@ -505,11 +505,6 @@ def set_up_window(root_layout):
     parent_containing_tabs = root_layout.parent()
     root_layout.addWidget(convert_setup_button)
 
-    convert_setup_button.clicked.connect(
-        # TODO: This doesnt work, figure out how to display a new window
-        lambda: display_new_setup(parent_containing_tabs, None)
-    )
-
     return
 
 
@@ -815,6 +810,10 @@ def main():
     set_up_window(root_layout)
     root.setCentralWidget(root_widget)
     root.show()
+
+    convert_button = root_widget.findChild(QPushButton, name="convert button")
+    convert_button.clicked.connect(lambda: display_new_setup(root_widget, None))
+
     app.exec()
 
 

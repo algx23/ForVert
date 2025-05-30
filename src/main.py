@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (
     QStackedWidget,
 )
 from PyQt6.QtCore import Qt
+from util import create_label
 
 
 def create_aero_tab():
@@ -760,6 +761,7 @@ def convert_setup(widget_containing_tw):
 def create_converted_setup_window():
     new_window_widget = QWidget()
     new_window_layout = QVBoxLayout()
+    new_window_widget.setObjectName("converted setup window")
     new_window_widget.setLayout(new_window_layout)
     back_to_conversion_button = QPushButton("Back to Enter Setup")
     back_to_conversion_button.setObjectName("new_setup_back_to_enter_button")
@@ -769,9 +771,8 @@ def create_converted_setup_window():
     return new_window_widget
 
 
-def display_converted_setup(page_w_existing_setup):
-    new_setup = convert_setup(page_w_existing_setup)
-    print(new_setup)
+def build_converted_window_widget(new_setup):
+    # print(new_setup)
 
     new_setup_window = create_converted_setup_window()
     new_setup_window.setWindowTitle("Converted Setup")
@@ -808,9 +809,14 @@ def display_converted_setup(page_w_existing_setup):
     return new_setup_window
 
 
-def find_back_button(converted_setup_window_widget):
-    back_button = None
+def find_back_button(widget_stack: QStackedWidget):
+    converted_setup_window_widget = None
+    for widget in widget_stack.children():
+        if widget.objectName() == "converted setup window":
+            converted_setup_window_widget = widget
+
     widgets = converted_setup_window_widget.children()
+    back_button = None
     for w in widgets:
         if (
             isinstance(w, QPushButton)
@@ -818,6 +824,19 @@ def find_back_button(converted_setup_window_widget):
         ):
             back_button = w
     return back_button
+
+
+def show_new_setup_window(display_w_existing_setup, widget_stack: QStackedWidget):
+    new_setup = convert_setup(display_w_existing_setup)
+    new_setup_window = build_converted_window_widget(new_setup)
+    widget_stack.addWidget(new_setup_window)
+    widget_stack.setCurrentWidget(new_setup_window)
+    back_button = find_back_button(widget_stack=widget_stack)
+    back_button.clicked.connect(
+        lambda: widget_stack.setCurrentWidget(display_w_existing_setup)
+    )
+
+    return
 
 
 def main():
@@ -833,18 +852,13 @@ def main():
 
     stacked_widget.setCurrentWidget(root_widget)
 
-    # if the convert button is clicked
-    converted_setup_window = display_converted_setup(root_widget)
-    stacked_widget.addWidget(converted_setup_window)
     convert_button = root_widget.findChild(QPushButton, name="convert button")
-    convert_button.clicked.connect(
-        lambda: stacked_widget.setCurrentWidget(converted_setup_window)
-    )
 
-    # if the back button is pressed, on the converted setup page
-    back_to_setup_input = find_back_button(converted_setup_window)
-    back_to_setup_input.clicked.connect(
-        lambda: stacked_widget.setCurrentWidget(root_widget)
+    # if the button is pressed convert the setup and display it
+    convert_button.clicked.connect(
+        lambda: show_new_setup_window(
+            display_w_existing_setup=root_widget, widget_stack=stacked_widget
+        )
     )
 
     root.setCentralWidget(stacked_widget)

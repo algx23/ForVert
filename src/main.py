@@ -12,7 +12,22 @@ from PyQt6.QtWidgets import (
     QStackedWidget,
 )
 from PyQt6.QtCore import Qt
-from util import create_label
+
+
+def build_menu_page(menu_page_layout: QVBoxLayout):
+    setup_button = QPushButton()
+    setup_button.setObjectName("setup menu option button")
+    setup_button.setText("Setup Converter")
+
+    # Overlay layout : TODO => overlay coming in a future commit
+    overlay_button = QPushButton()
+    overlay_button.setObjectName("overlay button")
+    overlay_button.setText("Overlay")
+
+    menu_page_layout.addWidget(setup_button)
+    menu_page_layout.addWidget(overlay_button)
+
+    return
 
 
 def create_aero_tab():
@@ -481,14 +496,24 @@ def create_tires_tab():
     return tires_page
 
 
-def set_up_window(root_layout):
+def build_setup_input_window(
+    setup_input_window_layout: QVBoxLayout, widget_stack: QStackedWidget
+):
     """
     This function sets up the window by adding the labels and widgets to enter
     the dry setup details
     """
 
+    # back to menu button
+    back_to_menu_button = QPushButton()
+    back_to_menu_button.setText("Back to Menu")
+    setup_input_window_layout.addWidget(back_to_menu_button)
+    back_to_menu_button.setObjectName("back to menu button")
+    # the menu page is always the one at pos 0 as it is added first so just set by index
+    back_to_menu_button.clicked.connect(lambda: widget_stack.setCurrentIndex(0))
+
     setup_tabs = QTabWidget()
-    root_layout.addWidget(setup_tabs)
+    setup_input_window_layout.addWidget(setup_tabs)
     aero_tab = create_aero_tab()
     suspension_tab = create_suspension_tab()
     transmission_tab = create_transmission_tab()
@@ -505,7 +530,7 @@ def set_up_window(root_layout):
 
     convert_setup_button = QPushButton(text="Convert Setup")
     convert_setup_button.setObjectName("convert button")
-    root_layout.addWidget(convert_setup_button)
+    setup_input_window_layout.addWidget(convert_setup_button)
 
     return
 
@@ -842,22 +867,40 @@ def show_new_setup_window(display_w_existing_setup, widget_stack: QStackedWidget
 def main():
 
     app = QApplication([])
+    # main window
     root = QMainWindow()
+    setup_input_window_layout = QVBoxLayout()
     stacked_widget = QStackedWidget()
-    root_widget = QWidget()
-    root_layout = QVBoxLayout()
-    root_widget.setLayout(root_layout)
-    set_up_window(root_layout)
-    stacked_widget.addWidget(root_widget)
 
-    stacked_widget.setCurrentWidget(root_widget)
+    # menu page
+    menu_page = QWidget()
+    menu_page_layout = QVBoxLayout()
+    menu_page.setLayout(menu_page_layout)
+    build_menu_page(menu_page_layout)
+    stacked_widget.addWidget(menu_page)
 
-    convert_button = root_widget.findChild(QPushButton, name="convert button")
+    # setup page for if you click the setup converter option
+    setup_page_widget = QWidget()
+    setup_page_widget.setLayout(setup_input_window_layout)
+    build_setup_input_window(setup_input_window_layout, stacked_widget)
+    stacked_widget.addWidget(setup_page_widget)
+
+    stacked_widget.setCurrentWidget(menu_page)
+
+    # handling the menu page clicks
+    setup_menu_option_button = menu_page.findChild(
+        QPushButton, name="setup menu option button"
+    )
+    setup_menu_option_button.clicked.connect(
+        lambda: stacked_widget.setCurrentWidget(setup_page_widget)
+    )
+
+    convert_button = setup_page_widget.findChild(QPushButton, name="convert button")
 
     # if the button is pressed convert the setup and display it
     convert_button.clicked.connect(
         lambda: show_new_setup_window(
-            display_w_existing_setup=root_widget, widget_stack=stacked_widget
+            display_w_existing_setup=setup_page_widget, widget_stack=stacked_widget
         )
     )
 

@@ -10,7 +10,6 @@ from PyQt6.QtWidgets import (
     QFrame,
     QStackedWidget,
 )
-from PyQt6.QtCore import Qt
 from pyqt_advanced_slider import Slider
 
 
@@ -169,13 +168,13 @@ def create_suspension_geo_tab():
     front_camber_label = QLabel("Front Camber")
     front_camber_label.setObjectName("data_category")
     front_camber_slider = Slider()
-    front_camber_slider.setMinimum(-350)
-    front_camber_slider.setMaximum(-250)
-    selected_front_camber_value = QLabel(str(front_camber_slider.getValue() / 100))
+    front_camber_slider.setFloat(True)
+    front_camber_slider.setMinimum(-3.50)
+    front_camber_slider.setMaximum(-2.50)
+    front_camber_slider.setSingleStep(0.01)
+    selected_front_camber_value = QLabel(str(front_camber_slider.getValue()))
     front_camber_slider.valueChanged.connect(
-        lambda: selected_front_camber_value.setText(
-            str(front_camber_slider.getValue() / 100)
-        )
+        lambda: selected_front_camber_value.setText(str(front_camber_slider.getValue()))
     )
 
     front_camber_widgets = [
@@ -187,13 +186,13 @@ def create_suspension_geo_tab():
     rear_camber_label = QLabel("Rear Camber")
     rear_camber_label.setObjectName("data_category")
     rear_camber_slider = Slider()
-    rear_camber_slider.setMinimum(-350)
-    rear_camber_slider.setMaximum(-250)
-    selected_rear_camber_value = QLabel(str(rear_camber_slider.getValue() / 100))
+    rear_camber_slider.setFloat(True)
+    rear_camber_slider.setMinimum(-3.50)
+    rear_camber_slider.setMaximum(-2.50)
+    rear_camber_slider.setSingleStep(0.01)
+    selected_rear_camber_value = QLabel(str(rear_camber_slider.getValue()))
     rear_camber_slider.valueChanged.connect(
-        lambda: selected_rear_camber_value.setText(
-            str(rear_camber_slider.getValue() / 100)
-        )
+        lambda: selected_rear_camber_value.setText(str(rear_camber_slider.getValue()))
     )
     rear_camber_widgets = [
         rear_camber_label,
@@ -210,14 +209,14 @@ def create_suspension_geo_tab():
     front_toe_label = QLabel("Front Toe")
     front_toe_label.setObjectName("data_category")
     front_toe_slider = Slider()
-    # maps to 0.05 to 0.15 but pyqt only supports int and +1 increment
-    front_toe_slider.setMinimum(5)
-    front_toe_slider.setMaximum(15)
-    selected_front_toe_value_label = QLabel(str(front_toe_slider.getValue() / 100))
+    front_toe_slider.setFloat(True)
+    front_toe_slider.setDecimals(2)  # two decimal places or the slider doesnt work
+    front_toe_slider.setMinimum(0.05)
+    front_toe_slider.setMaximum(0.15)
+    front_toe_slider.setSingleStep(0.01)
+    selected_front_toe_value_label = QLabel(str(front_toe_slider.getValue()))
     front_toe_slider.valueChanged.connect(
-        lambda: selected_front_toe_value_label.setText(
-            str(front_toe_slider.getValue() / 100)
-        )
+        lambda: selected_front_toe_value_label.setText(str(front_toe_slider.getValue()))
     )
     front_toe_widgets = [
         front_toe_label,
@@ -228,14 +227,15 @@ def create_suspension_geo_tab():
     rear_toe_label = QLabel("Rear Toe")
     rear_toe_label.setObjectName("data_category")
     rear_toe_slider = Slider()
-    rear_toe_slider.setMinimum(20)
-    rear_toe_slider.setMaximum(50)
-    # maps to 0.2 to 0.5 but pyqt only supports ints and +1 increments
-    selected_rear_toe_value_label = QLabel(str(rear_toe_slider.getValue() / 100))
+    rear_toe_slider.setFloat(True)
+    rear_toe_slider.setDecimals(2)
+    rear_toe_slider.setMinimum(0.2)
+    rear_toe_slider.setMaximum(0.5)
+    rear_toe_slider.setSingleStep(0.01)
+
+    selected_rear_toe_value_label = QLabel(str(rear_toe_slider.getValue()))
     rear_toe_slider.valueChanged.connect(
-        lambda: selected_rear_toe_value_label.setText(
-            str(rear_toe_slider.getValue() / 100)
-        )
+        lambda: selected_rear_toe_value_label.setText(str(rear_toe_slider.getValue()))
     )
     rear_toe_widgets = [rear_toe_label, rear_toe_slider, selected_rear_toe_value_label]
 
@@ -472,14 +472,13 @@ def create_tires_tab():
     # so to map, when displaying the selected tire pressures, divide the answer by 10
     # so an increment of 1 in the slider is "actually" an increment of 0.1, which
     # reflects the behavior in F1 2019.
-    front_tp_slider.setMinimum(210)
-    front_tp_slider.setMaximum(250)
-    front_tp_slider.setSingleStep(4)
-    selected_front_tp_value_label = QLabel(str(front_tp_slider.getValue() / 10))
+    front_tp_slider.setMinimum(21)
+    front_tp_slider.setMaximum(25)
+    front_tp_slider.setFloat(True)
+    front_tp_slider.setSingleStep(0.4)
+    selected_front_tp_value_label = QLabel(str(front_tp_slider.getValue()))
     front_tp_slider.valueChanged.connect(
-        lambda: selected_front_tp_value_label.setText(
-            str(front_tp_slider.getValue() / 10)
-        )
+        lambda: selected_front_tp_value_label.setText(str(front_tp_slider.getValue()))
     )
     front_tp_widgets = [front_tp_label, front_tp_slider, selected_front_tp_value_label]
 
@@ -490,14 +489,13 @@ def create_tires_tab():
     rear_tp_label = QLabel("Rear Tire Pressure")
     rear_tp_label.setObjectName("data_category")
     rear_tp_slider = Slider()
-    rear_tp_slider.setMinimum(195)
-    rear_tp_slider.setMaximum(235)
-    rear_tp_slider.setSingleStep(4)
-    selected_rear_tp_value_label = QLabel(str(rear_tp_slider.getValue() / 10))
+    rear_tp_slider.setFloat(0.4)
+    rear_tp_slider.setMinimum(19.5)
+    rear_tp_slider.setMaximum(23.5)
+    rear_tp_slider.setSingleStep(0.4)
+    selected_rear_tp_value_label = QLabel(str(rear_tp_slider.getValue()))
     rear_tp_slider.valueChanged.connect(
-        lambda: selected_rear_tp_value_label.setText(
-            str(rear_tp_slider.getValue() / 10)
-        )
+        lambda: selected_rear_tp_value_label.setText(str(rear_tp_slider.getValue()))
     )
 
     rear_tp_widgets = [rear_tp_label, rear_tp_slider, selected_rear_tp_value_label]
@@ -629,10 +627,10 @@ def get_data_from_tab_layouts(tabs_and_layouts):
                 setup_values[title][data_category] = value_of_category
 
     # the values for suspension geometry needs to be divided by 100
-    map_slider_values(setup_values["Suspension Geometry"], factor=0.01)
+    # map_slider_values(setup_values["Suspension Geometry"], factor=0.01)
 
     # tire pressure values need to be divided by 10
-    map_slider_values(setup_values["Tires"], factor=0.1)
+    # map_slider_values(setup_values["Tires"], factor=0.1)
 
     return setup_values
 
@@ -676,7 +674,7 @@ def update_suspension_geometry(init_sg_vals):
     rear_toe = init_sg_vals["Rear Toe"]
 
     if rear_camber > -3.5:
-        rear_camber -= 0.1
+        rear_camber -= 0.10
     return (front_camber, rear_camber, front_toe, rear_toe)
 
 

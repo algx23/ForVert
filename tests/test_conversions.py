@@ -1,5 +1,9 @@
 import pytest
-from f1sc.main import update_aerodynamics, update_transmission
+from f1sc.main import (
+    update_aerodynamics,
+    update_transmission,
+    update_suspension_geometry,
+)
 
 
 def test_aero_update():
@@ -26,3 +30,25 @@ def test_transmission_over_70():
     }
     update_diff_off = update_transmission(input_transmission_vals)[1]
     assert update_diff_off == 65
+
+
+def test_suspension_geometry():
+    input_sus_geo = {
+        "Front Camber": 1,
+        "Rear Camber": -2.5,
+        "Front Toe": 1,
+        "Rear Toe": 1,
+    }
+    updated_sus_geo = update_suspension_geometry(input_sus_geo)
+    assert updated_sus_geo[1] == -2.6
+
+
+def test_sus_geo_limit():
+    input_sus_geo = {
+        "Front Camber": 1,
+        "Rear Camber": -3.5,
+        "Front Toe": 1,
+        "Rear Toe": 1,
+    }
+    updated_sus_geo = update_suspension_geometry(input_sus_geo)
+    assert updated_sus_geo[1] == -3.5

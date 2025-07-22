@@ -635,15 +635,6 @@ def get_data_from_tab_layouts(tabs_and_layouts):
     return setup_values
 
 
-def map_slider_values(section_to_map: dict, factor: float):
-    # map the values
-    for key in section_to_map:
-        section_to_map[key] *= factor
-
-    return
-
-
-# TODO: Implement conversion logic with the new UI when ready
 def update_aerodynamics(init_aero_vals):
     front_wing = init_aero_vals["Front Wing Aero"]
     rear_wing = init_aero_vals["Rear Wing Aero"]
@@ -843,6 +834,10 @@ def build_converted_window_widget(new_setup):
     return new_setup_window
 
 
+def build_overlay_page(overlay_widget: QWidget, overlay_layout: QVBoxLayout):
+    return
+
+
 def find_back_button(widget_stack: QStackedWidget):
     converted_setup_window_widget = None
     for widget in widget_stack.children():
@@ -895,6 +890,10 @@ def main():
     stacked_widget.addWidget(setup_page_widget)
 
     stacked_widget.setCurrentWidget(menu_page)
+
+    overlay_page_widget, overlay_page_layout = QWidget(), QVBoxLayout()
+    overlay_page_widget.setLayout(overlay_page_layout)
+    build_overlay_page(overlay_page_widget, overlay_page_layout)
 
     # handling the menu page clicks
     setup_menu_option_button = menu_page.findChild(

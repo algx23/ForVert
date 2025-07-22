@@ -17,3 +17,12 @@ def test_transmission_update():
 
     assert update_diff_on == 50
     assert update_diff_off == 69
+
+
+def test_transmission_over_70():
+    input_transmission_vals: dict = {
+        "Differential Adjustment On Throttle (%)": 75,
+        "Differential Adjustment Off throttle (%)": 76,  # this is the thing to test
+    }
+    update_diff_off = update_transmission(input_transmission_vals)[1]
+    assert update_diff_off == 65

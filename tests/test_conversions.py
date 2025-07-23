@@ -5,6 +5,7 @@ from f1sc.main import (
     update_suspension_geometry,
     update_brakes,
     update_suspension,
+    update_tires,
 )
 
 
@@ -101,3 +102,10 @@ def test_brakes():
     updated_pressure, updated_bias = update_brakes(input_brake_vals)
     assert updated_pressure == 89
     assert updated_bias == 52
+
+
+def test_tires():
+    input_tire_vals = {"Front Tire Pressure": 21.8, "Rear Tire Pressure": 21.1}
+    front, rear = update_tires(input_tire_vals)
+    assert front == 21.4
+    assert rear == 20.3

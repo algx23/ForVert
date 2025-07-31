@@ -11,6 +11,7 @@ from PyQt6.QtWidgets import (
     QStackedWidget,
 )
 from pyqt_advanced_slider import Slider
+from f1sc.util import create_label
 
 
 def build_menu_page(menu_page_layout: QVBoxLayout):
@@ -40,28 +41,26 @@ def create_aero_tab():
     front_wing_section_layout = QHBoxLayout()
     rear_wing_section_layout = QHBoxLayout()
 
-    front_wing_label = QLabel()
-    front_wing_label.setText("Front Wing Aero")
-    front_wing_label.setObjectName("data_category")
+    front_wing_label = create_label("Front Wing Aero", "data_category")
+    # front_wing_label.setText("Front Wing Aero")
+    # front_wing_label.setObjectName("data_category")
     front_wing_slider = Slider()
     front_wing_slider.setMinimum(1)
     front_wing_slider.setMaximum(11)
 
     # show the value of the slider next to it, and update it when a you drag across it
-    selected_front_wing_value_label = QLabel(str(front_wing_slider.getValue()))
+    selected_front_wing_value_label = create_label(str(front_wing_slider.getValue()))
     front_wing_slider.valueChanged.connect(
         lambda: selected_front_wing_value_label.setText(
             str(front_wing_slider.getValue())
         )
     )
 
-    rear_wing_label = QLabel()
-    rear_wing_label.setText("Rear Wing Aero")
-    rear_wing_label.setObjectName("data_category")
+    rear_wing_label = create_label("Rear Wing Aero", "data_category")
     rear_wing_slider = Slider()
     rear_wing_slider.setMinimum(1)
     rear_wing_slider.setMaximum(11)
-    selected_rear_wing_value_label = QLabel(str(rear_wing_slider.getValue()))
+    selected_rear_wing_value_label = create_label(str(rear_wing_slider.getValue()))
     rear_wing_slider.valueChanged.connect(
         lambda: selected_rear_wing_value_label.setText(str(rear_wing_slider.getValue()))
     )
@@ -96,13 +95,14 @@ def create_transmission_tab():
 
     # on throttle
     on_throttle_layout = QHBoxLayout()
-    diff_adjust_on_label = QLabel("Differential Adjustment On Throttle (%)")
-    diff_adjust_on_label.setObjectName("data_category")
+    diff_adjust_on_label = create_label(
+        "Differential Adjustment On Throttle (%)", "data_category"
+    )
     diff_adjust_on_slider = Slider()
     diff_adjust_on_slider.setMaximum(100)
     diff_adjust_on_slider.setMinimum(50)
 
-    selected_diff_on_value = QLabel(str(diff_adjust_on_slider.getValue()))
+    selected_diff_on_value = create_label(str(diff_adjust_on_slider.getValue()))
     diff_adjust_on_slider.valueChanged.connect(
         lambda: selected_diff_on_value.setText(str(diff_adjust_on_slider.getValue()))
     )
@@ -115,12 +115,13 @@ def create_transmission_tab():
 
     # off throttle
     off_throttle_layout = QHBoxLayout()
-    diff_adjust_off_label = QLabel("Differential Adjustment Off throttle (%)")
-    diff_adjust_off_label.setObjectName("data_category")
+    diff_adjust_off_label = create_label(
+        "Differential Adjustment Off throttle (%)", "data_category"
+    )
     diff_adjust_off_slider = Slider()
     diff_adjust_off_slider.setMinimum(50)
     diff_adjust_off_slider.setMaximum(100)
-    selected_diff_off_value = QLabel(str(diff_adjust_off_slider.getValue()))
+    selected_diff_off_value = create_label(str(diff_adjust_off_slider.getValue()))
     diff_adjust_off_slider.valueChanged.connect(
         lambda: selected_diff_off_value.setText(str(diff_adjust_off_slider.getValue()))
     )
@@ -165,14 +166,13 @@ def create_suspension_geo_tab():
 
     # camber
 
-    front_camber_label = QLabel("Front Camber")
-    front_camber_label.setObjectName("data_category")
+    front_camber_label = create_label("Front Camber", "data_category")
     front_camber_slider = Slider()
     front_camber_slider.setFloat(True)
     front_camber_slider.setMinimum(-3.50)
     front_camber_slider.setMaximum(-2.50)
     front_camber_slider.setSingleStep(0.01)
-    selected_front_camber_value = QLabel(str(front_camber_slider.getValue()))
+    selected_front_camber_value = create_label(str(front_camber_slider.getValue()))
     front_camber_slider.valueChanged.connect(
         lambda: selected_front_camber_value.setText(str(front_camber_slider.getValue()))
     )
@@ -183,14 +183,13 @@ def create_suspension_geo_tab():
         selected_front_camber_value,
     ]
 
-    rear_camber_label = QLabel("Rear Camber")
-    rear_camber_label.setObjectName("data_category")
+    rear_camber_label = create_label("Rear Camber", "data_category")
     rear_camber_slider = Slider()
     rear_camber_slider.setFloat(True)
     rear_camber_slider.setMinimum(-3.50)
     rear_camber_slider.setMaximum(-2.50)
     rear_camber_slider.setSingleStep(0.01)
-    selected_rear_camber_value = QLabel(str(rear_camber_slider.getValue()))
+    selected_rear_camber_value = create_label(str(rear_camber_slider.getValue()))
     rear_camber_slider.valueChanged.connect(
         lambda: selected_rear_camber_value.setText(str(rear_camber_slider.getValue()))
     )
@@ -206,15 +205,14 @@ def create_suspension_geo_tab():
         rear_camber_layout.addWidget(widget)
 
     #  toe
-    front_toe_label = QLabel("Front Toe")
-    front_toe_label.setObjectName("data_category")
+    front_toe_label = create_label("Front Toe", "data_category")
     front_toe_slider = Slider()
     front_toe_slider.setFloat(True)
     front_toe_slider.setDecimals(2)  # two decimal places or the slider doesnt work
     front_toe_slider.setMinimum(0.05)
     front_toe_slider.setMaximum(0.15)
     front_toe_slider.setSingleStep(0.01)
-    selected_front_toe_value_label = QLabel(str(front_toe_slider.getValue()))
+    selected_front_toe_value_label = create_label(str(front_toe_slider.getValue()))
     front_toe_slider.valueChanged.connect(
         lambda: selected_front_toe_value_label.setText(str(front_toe_slider.getValue()))
     )
@@ -224,8 +222,7 @@ def create_suspension_geo_tab():
         selected_front_toe_value_label,
     ]
 
-    rear_toe_label = QLabel("Rear Toe")
-    rear_toe_label.setObjectName("data_category")
+    rear_toe_label = create_label("Rear Toe", "data_category")
     rear_toe_slider = Slider()
     rear_toe_slider.setFloat(True)
     rear_toe_slider.setDecimals(2)
@@ -233,7 +230,7 @@ def create_suspension_geo_tab():
     rear_toe_slider.setMaximum(0.5)
     rear_toe_slider.setSingleStep(0.01)
 
-    selected_rear_toe_value_label = QLabel(str(rear_toe_slider.getValue()))
+    selected_rear_toe_value_label = create_label(str(rear_toe_slider.getValue()))
     rear_toe_slider.valueChanged.connect(
         lambda: selected_rear_toe_value_label.setText(str(rear_toe_slider.getValue()))
     )
@@ -282,10 +279,11 @@ def create_suspension_tab():
         suspension_page_layout.addLayout(layout)
 
     # Suspension
-    front_suspension_label = QLabel("Front Suspension (soft - firm)")
-    front_suspension_label.setObjectName("data_category")
+    front_suspension_label = create_label(
+        "Front Suspension (soft - firm)", "data_category"
+    )
     front_suspension_slider = Slider()
-    selected_front_suspension_value_label = QLabel(
+    selected_front_suspension_value_label = create_label(
         str(front_suspension_slider.getValue())
     )
     front_suspension_slider.valueChanged.connect(
@@ -303,10 +301,12 @@ def create_suspension_tab():
 
     # rear suspension
 
-    rear_suspension_label = QLabel("Rear Suspension (soft - firm)")
+    rear_suspension_label = create_label(
+        "Rear Suspension (soft - firm)", "data_category"
+    )
     rear_suspension_label.setObjectName("data_category")
     rear_suspension_slider = Slider()
-    selected_rear_suspension_value_label = QLabel(
+    selected_rear_suspension_value_label = create_label(
         str(rear_suspension_slider.getValue())
     )
     rear_suspension_slider.valueChanged.connect(
@@ -327,11 +327,10 @@ def create_suspension_tab():
         rear_suspension_layout.addWidget(widget)
 
     # front anti roll bar
-    front_arb_label = QLabel("Front Anti Roll Bar")
-    front_arb_label.setObjectName("data_category")
+    front_arb_label = create_label("Front Anti Roll Bar", "data_category")
     front_arb_slider = Slider()
     sliders.append(front_arb_slider)
-    selected_front_arb_value_label = QLabel(str(front_arb_slider.getValue()))
+    selected_front_arb_value_label = create_label(str(front_arb_slider.getValue()))
     front_arb_slider.valueChanged.connect(
         lambda: selected_front_arb_value_label.setText(str(front_arb_slider.getValue()))
     )
@@ -344,11 +343,11 @@ def create_suspension_tab():
         front_arb_layout.addWidget(widget)
 
     # rear anti roll bar
-    rear_arb_label = QLabel("Rear Anti Roll Bar")
+    rear_arb_label = create_label("Rear Anti Roll Bar")
     rear_arb_label.setObjectName("data_category")
     rear_arb_slider = Slider()
     sliders.append(rear_arb_slider)
-    selected_rear_arb_value_label = QLabel(str(rear_arb_slider.getValue()))
+    selected_rear_arb_value_label = create_label(str(rear_arb_slider.getValue()))
     rear_arb_slider.valueChanged.connect(
         lambda: selected_rear_arb_value_label.setText(str(rear_arb_slider.getValue()))
     )
@@ -357,11 +356,10 @@ def create_suspension_tab():
         rear_arb_layout.addWidget(widget)
 
     # front ride height
-    front_rh_label = QLabel("Front Ride Height")
-    front_rh_label.setObjectName("data_category")
+    front_rh_label = create_label("Front Ride Height", "data_category")
     front_rh_slider = Slider()
     sliders.append(front_rh_slider)
-    selected_front_rh_value_label = QLabel(str(front_rh_slider.getValue()))
+    selected_front_rh_value_label = create_label(str(front_rh_slider.getValue()))
     front_rh_slider.valueChanged.connect(
         lambda: selected_front_rh_value_label.setText(str(front_rh_slider.getValue()))
     )
@@ -371,11 +369,11 @@ def create_suspension_tab():
         front_rh_layout.addWidget(widget)
 
     # rear ride height
-    rear_rh_label = QLabel("Rear Ride Height")
+    rear_rh_label = create_label("Rear Ride Height", "data_category")
     rear_rh_label.setObjectName("data_category")
     rear_rh_slider = Slider()
     sliders.append(rear_rh_slider)
-    selected_rear_rh_value_label = QLabel(str(rear_rh_slider.getValue()))
+    selected_rear_rh_value_label = create_label(str(rear_rh_slider.getValue()))
     rear_rh_slider.valueChanged.connect(
         lambda: selected_rear_rh_value_label.setText(str(rear_rh_slider.getValue()))
     )
@@ -403,12 +401,13 @@ def create_brakes_tab():
     for layout in layouts:
         brakes_page_layout.addLayout(layout)
 
-    brake_pressure_label = QLabel("Brake Pressure %")
-    brake_pressure_label.setObjectName("data_category")
+    brake_pressure_label = create_label("Brake Pressure %", "data_category")
     brake_pressure_slider = Slider()
     brake_pressure_slider.setMinimum(50)
     brake_pressure_slider.setMaximum(100)
-    selected_brake_pressure_value_label = QLabel(str(brake_pressure_slider.getValue()))
+    selected_brake_pressure_value_label = create_label(
+        str(brake_pressure_slider.getValue())
+    )
     brake_pressure_slider.valueChanged.connect(
         lambda: selected_brake_pressure_value_label.setText(
             str(brake_pressure_slider.getValue())
@@ -426,12 +425,11 @@ def create_brakes_tab():
     brakes_page_layout.addLayout(brake_pressure_layout)
     brakes_page_layout.addLayout(brake_bias_layout)
 
-    brake_bias_label = QLabel("Brake Bias (Front ---  Rear) %")
-    brake_bias_label.setObjectName("data_category")
+    brake_bias_label = create_label("Brake Bias (Front ---  Rear) %", "data_category")
     brake_bias_slider = Slider()
     brake_bias_slider.setMinimum(50)
     brake_bias_slider.setMaximum(70)
-    selected_brake_bias_value_label = QLabel(str(brake_bias_slider.getValue()))
+    selected_brake_bias_value_label = create_label(str(brake_bias_slider.getValue()))
     brake_bias_slider.valueChanged.connect(
         lambda: selected_brake_bias_value_label.setText(
             str(brake_bias_slider.getValue())
@@ -463,8 +461,7 @@ def create_tires_tab():
     tires_page_layout.addLayout(rear_tire_pressure_layout)
 
     # front tire pressure section
-    front_tp_label = QLabel("Front Tire Pressure")
-    front_tp_label.setObjectName("data_category")
+    front_tp_label = create_label("Front Tire Pressure", "data_category")
 
     front_tp_slider = Slider()
     # PyQT only supports integer increments, so x10 for the min and max values
@@ -476,7 +473,7 @@ def create_tires_tab():
     front_tp_slider.setMaximum(25)
     front_tp_slider.setFloat(True)
     front_tp_slider.setSingleStep(0.4)
-    selected_front_tp_value_label = QLabel(str(front_tp_slider.getValue()))
+    selected_front_tp_value_label = create_label(str(front_tp_slider.getValue()))
     front_tp_slider.valueChanged.connect(
         lambda: selected_front_tp_value_label.setText(str(front_tp_slider.getValue()))
     )
@@ -486,14 +483,13 @@ def create_tires_tab():
         front_tire_pressure_layout.addWidget(widget)
 
     # rear tires
-    rear_tp_label = QLabel("Rear Tire Pressure")
-    rear_tp_label.setObjectName("data_category")
+    rear_tp_label = create_label("Rear Tire Pressure", "data_category")
     rear_tp_slider = Slider()
     rear_tp_slider.setFloat(0.4)
     rear_tp_slider.setMinimum(19.5)
     rear_tp_slider.setMaximum(23.5)
     rear_tp_slider.setSingleStep(0.4)
-    selected_rear_tp_value_label = QLabel(str(rear_tp_slider.getValue()))
+    selected_rear_tp_value_label = create_label(str(rear_tp_slider.getValue()))
     rear_tp_slider.valueChanged.connect(
         lambda: selected_rear_tp_value_label.setText(str(rear_tp_slider.getValue()))
     )
@@ -811,7 +807,7 @@ def build_converted_window_widget(new_setup):
         area_layout = QVBoxLayout()
         area_frame.setLayout(area_layout)
 
-        setup_area_label = QLabel(setup_area)
+        setup_area_label = create_label(setup_area)
         area_layout.addWidget(setup_area_label)
 
         # The setup values under each section, eg front wing aero, rear wing aero
@@ -821,9 +817,9 @@ def build_converted_window_widget(new_setup):
             item_frame.setLayout(item_frame_layout)
 
             item_name_text = str(setup_item_name) + ": "
-            setup_item_name_label = QLabel(item_name_text)
+            setup_item_name_label = create_label(item_name_text)
 
-            setup_item_value_label = QLabel(str(setup_item_value))
+            setup_item_value_label = create_label(str(setup_item_value))
 
             item_frame_layout.addWidget(setup_item_name_label)
             item_frame_layout.addWidget(setup_item_value_label)

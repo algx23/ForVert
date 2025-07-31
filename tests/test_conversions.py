@@ -57,7 +57,6 @@ def test_sus_geo_limit():
     assert updated_sus_geo[1] == -3.5
 
 
-# TODO: suspension tests
 def test_suspension():
     input_sus_vals = {
         "Front Suspension (soft - firm)": 3,

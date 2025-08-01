@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
     QStackedWidget,
 )
 from pyqt_advanced_slider import Slider
-from f1sc.util import create_label
+from f1sc.util import create_label, create_slider
 
 
 def build_menu_page(menu_page_layout: QVBoxLayout):
@@ -42,11 +42,7 @@ def create_aero_tab():
     rear_wing_section_layout = QHBoxLayout()
 
     front_wing_label = create_label("Front Wing Aero", "data_category")
-    # front_wing_label.setText("Front Wing Aero")
-    # front_wing_label.setObjectName("data_category")
-    front_wing_slider = Slider()
-    front_wing_slider.setMinimum(1)
-    front_wing_slider.setMaximum(11)
+    front_wing_slider = create_slider(min=1, max=11, is_float=False)
 
     # show the value of the slider next to it, and update it when a you drag across it
     selected_front_wing_value_label = create_label(str(front_wing_slider.getValue()))
@@ -57,9 +53,7 @@ def create_aero_tab():
     )
 
     rear_wing_label = create_label("Rear Wing Aero", "data_category")
-    rear_wing_slider = Slider()
-    rear_wing_slider.setMinimum(1)
-    rear_wing_slider.setMaximum(11)
+    rear_wing_slider = create_slider(1, 11, False)
     selected_rear_wing_value_label = create_label(str(rear_wing_slider.getValue()))
     rear_wing_slider.valueChanged.connect(
         lambda: selected_rear_wing_value_label.setText(str(rear_wing_slider.getValue()))
@@ -98,9 +92,7 @@ def create_transmission_tab():
     diff_adjust_on_label = create_label(
         "Differential Adjustment On Throttle (%)", "data_category"
     )
-    diff_adjust_on_slider = Slider()
-    diff_adjust_on_slider.setMaximum(100)
-    diff_adjust_on_slider.setMinimum(50)
+    diff_adjust_on_slider = create_slider(50, 100, False)
 
     selected_diff_on_value = create_label(str(diff_adjust_on_slider.getValue()))
     diff_adjust_on_slider.valueChanged.connect(
@@ -118,9 +110,7 @@ def create_transmission_tab():
     diff_adjust_off_label = create_label(
         "Differential Adjustment Off throttle (%)", "data_category"
     )
-    diff_adjust_off_slider = Slider()
-    diff_adjust_off_slider.setMinimum(50)
-    diff_adjust_off_slider.setMaximum(100)
+    diff_adjust_off_slider = create_slider(50, 100, False)
     selected_diff_off_value = create_label(str(diff_adjust_off_slider.getValue()))
     diff_adjust_off_slider.valueChanged.connect(
         lambda: selected_diff_off_value.setText(str(diff_adjust_off_slider.getValue()))
@@ -167,10 +157,7 @@ def create_suspension_geo_tab():
     # camber
 
     front_camber_label = create_label("Front Camber", "data_category")
-    front_camber_slider = Slider()
-    front_camber_slider.setFloat(True)
-    front_camber_slider.setMinimum(-3.50)
-    front_camber_slider.setMaximum(-2.50)
+    front_camber_slider = create_slider(-3.50, -2.50, True)
     front_camber_slider.setSingleStep(0.01)
     selected_front_camber_value = create_label(str(front_camber_slider.getValue()))
     front_camber_slider.valueChanged.connect(
@@ -184,10 +171,7 @@ def create_suspension_geo_tab():
     ]
 
     rear_camber_label = create_label("Rear Camber", "data_category")
-    rear_camber_slider = Slider()
-    rear_camber_slider.setFloat(True)
-    rear_camber_slider.setMinimum(-3.50)
-    rear_camber_slider.setMaximum(-2.50)
+    rear_camber_slider = create_slider(-3.50, -2.50, True)
     rear_camber_slider.setSingleStep(0.01)
     selected_rear_camber_value = create_label(str(rear_camber_slider.getValue()))
     rear_camber_slider.valueChanged.connect(
@@ -206,11 +190,8 @@ def create_suspension_geo_tab():
 
     #  toe
     front_toe_label = create_label("Front Toe", "data_category")
-    front_toe_slider = Slider()
-    front_toe_slider.setFloat(True)
+    front_toe_slider = create_slider(0.05, 0.15, True)
     front_toe_slider.setDecimals(2)  # two decimal places or the slider doesnt work
-    front_toe_slider.setMinimum(0.05)
-    front_toe_slider.setMaximum(0.15)
     front_toe_slider.setSingleStep(0.01)
     selected_front_toe_value_label = create_label(str(front_toe_slider.getValue()))
     front_toe_slider.valueChanged.connect(
@@ -223,11 +204,8 @@ def create_suspension_geo_tab():
     ]
 
     rear_toe_label = create_label("Rear Toe", "data_category")
-    rear_toe_slider = Slider()
-    rear_toe_slider.setFloat(True)
+    rear_toe_slider = create_slider(0.2, 0.5, True)
     rear_toe_slider.setDecimals(2)
-    rear_toe_slider.setMinimum(0.2)
-    rear_toe_slider.setMaximum(0.5)
     rear_toe_slider.setSingleStep(0.01)
 
     selected_rear_toe_value_label = create_label(str(rear_toe_slider.getValue()))
@@ -282,7 +260,7 @@ def create_suspension_tab():
     front_suspension_label = create_label(
         "Front Suspension (soft - firm)", "data_category"
     )
-    front_suspension_slider = Slider()
+    front_suspension_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
     selected_front_suspension_value_label = create_label(
         str(front_suspension_slider.getValue())
     )
@@ -304,8 +282,7 @@ def create_suspension_tab():
     rear_suspension_label = create_label(
         "Rear Suspension (soft - firm)", "data_category"
     )
-    rear_suspension_label.setObjectName("data_category")
-    rear_suspension_slider = Slider()
+    rear_suspension_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
     selected_rear_suspension_value_label = create_label(
         str(rear_suspension_slider.getValue())
     )
@@ -320,16 +297,13 @@ def create_suspension_tab():
         rear_suspension_slider,
         selected_rear_suspension_value_label,
     ]
-    sliders.append(front_suspension_slider)
-    sliders.append(rear_suspension_slider)
 
     for widget in rear_suspension_widgets:
         rear_suspension_layout.addWidget(widget)
 
     # front anti roll bar
     front_arb_label = create_label("Front Anti Roll Bar", "data_category")
-    front_arb_slider = Slider()
-    sliders.append(front_arb_slider)
+    front_arb_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
     selected_front_arb_value_label = create_label(str(front_arb_slider.getValue()))
     front_arb_slider.valueChanged.connect(
         lambda: selected_front_arb_value_label.setText(str(front_arb_slider.getValue()))
@@ -345,8 +319,7 @@ def create_suspension_tab():
     # rear anti roll bar
     rear_arb_label = create_label("Rear Anti Roll Bar")
     rear_arb_label.setObjectName("data_category")
-    rear_arb_slider = Slider()
-    sliders.append(rear_arb_slider)
+    rear_arb_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
     selected_rear_arb_value_label = create_label(str(rear_arb_slider.getValue()))
     rear_arb_slider.valueChanged.connect(
         lambda: selected_rear_arb_value_label.setText(str(rear_arb_slider.getValue()))
@@ -357,8 +330,7 @@ def create_suspension_tab():
 
     # front ride height
     front_rh_label = create_label("Front Ride Height", "data_category")
-    front_rh_slider = Slider()
-    sliders.append(front_rh_slider)
+    front_rh_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
     selected_front_rh_value_label = create_label(str(front_rh_slider.getValue()))
     front_rh_slider.valueChanged.connect(
         lambda: selected_front_rh_value_label.setText(str(front_rh_slider.getValue()))
@@ -370,9 +342,7 @@ def create_suspension_tab():
 
     # rear ride height
     rear_rh_label = create_label("Rear Ride Height", "data_category")
-    rear_rh_label.setObjectName("data_category")
-    rear_rh_slider = Slider()
-    sliders.append(rear_rh_slider)
+    rear_rh_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
     selected_rear_rh_value_label = create_label(str(rear_rh_slider.getValue()))
     rear_rh_slider.valueChanged.connect(
         lambda: selected_rear_rh_value_label.setText(str(rear_rh_slider.getValue()))
@@ -380,10 +350,6 @@ def create_suspension_tab():
     rear_rh_widgets = [rear_rh_label, rear_rh_slider, selected_rear_rh_value_label]
     for widget in rear_rh_widgets:
         rear_rh_layout.addWidget(widget)
-
-    for slider in sliders:
-        slider.setMinimum(SLIDER_MIN)
-        slider.setMaximum(SLIDER_MAX)
 
     return suspension_page
 
@@ -402,9 +368,7 @@ def create_brakes_tab():
         brakes_page_layout.addLayout(layout)
 
     brake_pressure_label = create_label("Brake Pressure %", "data_category")
-    brake_pressure_slider = Slider()
-    brake_pressure_slider.setMinimum(50)
-    brake_pressure_slider.setMaximum(100)
+    brake_pressure_slider = create_slider(50, 100, False)
     selected_brake_pressure_value_label = create_label(
         str(brake_pressure_slider.getValue())
     )
@@ -426,9 +390,7 @@ def create_brakes_tab():
     brakes_page_layout.addLayout(brake_bias_layout)
 
     brake_bias_label = create_label("Brake Bias (Front ---  Rear) %", "data_category")
-    brake_bias_slider = Slider()
-    brake_bias_slider.setMinimum(50)
-    brake_bias_slider.setMaximum(70)
+    brake_bias_slider = create_slider(50, 70, False)
     selected_brake_bias_value_label = create_label(str(brake_bias_slider.getValue()))
     brake_bias_slider.valueChanged.connect(
         lambda: selected_brake_bias_value_label.setText(
@@ -463,15 +425,7 @@ def create_tires_tab():
     # front tire pressure section
     front_tp_label = create_label("Front Tire Pressure", "data_category")
 
-    front_tp_slider = Slider()
-    # PyQT only supports integer increments, so x10 for the min and max values
-    # in game the range is 21 -> 25, in the app the internal values are 210 -> 250
-    # so to map, when displaying the selected tire pressures, divide the answer by 10
-    # so an increment of 1 in the slider is "actually" an increment of 0.1, which
-    # reflects the behavior in F1 2019.
-    front_tp_slider.setMinimum(21)
-    front_tp_slider.setMaximum(25)
-    front_tp_slider.setFloat(True)
+    front_tp_slider = create_slider(21, 25, True)
     front_tp_slider.setSingleStep(0.4)
     selected_front_tp_value_label = create_label(str(front_tp_slider.getValue()))
     front_tp_slider.valueChanged.connect(
@@ -484,10 +438,7 @@ def create_tires_tab():
 
     # rear tires
     rear_tp_label = create_label("Rear Tire Pressure", "data_category")
-    rear_tp_slider = Slider()
-    rear_tp_slider.setFloat(0.4)
-    rear_tp_slider.setMinimum(19.5)
-    rear_tp_slider.setMaximum(23.5)
+    rear_tp_slider = create_slider(19.5, 23.5, True)
     rear_tp_slider.setSingleStep(0.4)
     selected_rear_tp_value_label = create_label(str(rear_tp_slider.getValue()))
     rear_tp_slider.valueChanged.connect(

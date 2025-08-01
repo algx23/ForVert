@@ -1,4 +1,5 @@
 import pytest
+
 from f1sc.main import (
     update_aerodynamics,
     update_transmission,

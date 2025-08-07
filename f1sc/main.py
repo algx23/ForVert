@@ -14,6 +14,15 @@ from pyqt_advanced_slider import Slider
 from f1sc.util import create_label, create_slider
 
 
+# test
+from f1sc.tabs.AeroTab import AeroTab
+from f1sc.tabs.TransmissionTab import TransmissionTab
+from f1sc.tabs.SuspensionTab import SuspensionTab
+from f1sc.tabs.SuspensionGeoTab import SuspensionGeometryTab
+from f1sc.tabs.BrakesTab import BrakesTab
+from f1sc.tabs.TiresTab import TiresTab
+
+
 def build_menu_page(menu_page_layout: QVBoxLayout):
     setup_button = QPushButton()
     setup_button.setObjectName("setup menu option button")
@@ -28,428 +37,6 @@ def build_menu_page(menu_page_layout: QVBoxLayout):
     menu_page_layout.addWidget(overlay_button)
 
     return
-
-
-def create_aero_tab():
-    # aerodynamics
-
-    aero_page = QWidget()
-    aero_page_layout = QVBoxLayout()
-    aero_page.setLayout(aero_page_layout)
-
-    # in the front wing and rear wing sections the widgets appear next to each other
-    front_wing_section_layout = QHBoxLayout()
-    rear_wing_section_layout = QHBoxLayout()
-
-    front_wing_label = create_label("Front Wing Aero", "data_category")
-    front_wing_slider = create_slider(min=1, max=11, is_float=False)
-
-    # show the value of the slider next to it, and update it when a you drag across it
-    selected_front_wing_value_label = create_label(str(front_wing_slider.getValue()))
-    front_wing_slider.valueChanged.connect(
-        lambda: selected_front_wing_value_label.setText(
-            str(front_wing_slider.getValue())
-        )
-    )
-
-    rear_wing_label = create_label("Rear Wing Aero", "data_category")
-    rear_wing_slider = create_slider(1, 11, False)
-    selected_rear_wing_value_label = create_label(str(rear_wing_slider.getValue()))
-    rear_wing_slider.valueChanged.connect(
-        lambda: selected_rear_wing_value_label.setText(str(rear_wing_slider.getValue()))
-    )
-
-    front_aero_widgets = [
-        front_wing_label,
-        front_wing_slider,
-        selected_front_wing_value_label,
-    ]
-    rear_aero_widgets = [
-        rear_wing_label,
-        rear_wing_slider,
-        selected_rear_wing_value_label,
-    ]
-
-    # in each section: section title, slider, slider value
-    for widget in front_aero_widgets:
-        front_wing_section_layout.addWidget(widget)
-    for widget in rear_aero_widgets:
-        rear_wing_section_layout.addWidget(widget)
-
-    aero_page_layout.addLayout(front_wing_section_layout)
-    aero_page_layout.addLayout(rear_wing_section_layout)
-
-    return aero_page
-
-
-def create_transmission_tab():
-    transmission_page = QWidget()
-    transmission_page_layout = QVBoxLayout()
-    transmission_page.setLayout(transmission_page_layout)
-
-    # on throttle
-    on_throttle_layout = QHBoxLayout()
-    diff_adjust_on_label = create_label(
-        "Differential Adjustment On Throttle (%)", "data_category"
-    )
-    diff_adjust_on_slider = create_slider(50, 100, False)
-
-    selected_diff_on_value = create_label(str(diff_adjust_on_slider.getValue()))
-    diff_adjust_on_slider.valueChanged.connect(
-        lambda: selected_diff_on_value.setText(str(diff_adjust_on_slider.getValue()))
-    )
-
-    on_throttle_widgets = [
-        diff_adjust_on_label,
-        diff_adjust_on_slider,
-        selected_diff_on_value,
-    ]
-
-    # off throttle
-    off_throttle_layout = QHBoxLayout()
-    diff_adjust_off_label = create_label(
-        "Differential Adjustment Off throttle (%)", "data_category"
-    )
-    diff_adjust_off_slider = create_slider(50, 100, False)
-    selected_diff_off_value = create_label(str(diff_adjust_off_slider.getValue()))
-    diff_adjust_off_slider.valueChanged.connect(
-        lambda: selected_diff_off_value.setText(str(diff_adjust_off_slider.getValue()))
-    )
-
-    off_throttle_widgets = [
-        diff_adjust_off_label,
-        diff_adjust_off_slider,
-        selected_diff_off_value,
-    ]
-    for widget in on_throttle_widgets:
-        on_throttle_layout.addWidget(widget)
-    for widget in off_throttle_widgets:
-        off_throttle_layout.addWidget(widget)
-
-    transmission_page_layout.addLayout(on_throttle_layout)
-    transmission_page_layout.addLayout(off_throttle_layout)
-
-    return transmission_page
-
-
-def create_suspension_geo_tab():
-    suspension_geo_page = QWidget()
-    suspension_geo_page_layout = QVBoxLayout()
-    suspension_geo_page.setLayout(suspension_geo_page_layout)
-
-    # layouts
-
-    front_camber_layout = QHBoxLayout()
-    rear_camber_layout = QHBoxLayout()
-    front_toe_layout = QHBoxLayout()
-    rear_toe_layout = QHBoxLayout()
-    layouts = []
-    layouts.append(front_camber_layout)
-    layouts.append(rear_camber_layout)
-    layouts.append(front_toe_layout)
-    layouts.append(rear_toe_layout)
-
-    for layout in layouts:
-        suspension_geo_page_layout.addLayout(layout)
-
-    # inputs:
-
-    # camber
-
-    front_camber_label = create_label("Front Camber", "data_category")
-    front_camber_slider = create_slider(-3.50, -2.50, True)
-    front_camber_slider.setSingleStep(0.01)
-    selected_front_camber_value = create_label(str(front_camber_slider.getValue()))
-    front_camber_slider.valueChanged.connect(
-        lambda: selected_front_camber_value.setText(str(front_camber_slider.getValue()))
-    )
-
-    front_camber_widgets = [
-        front_camber_label,
-        front_camber_slider,
-        selected_front_camber_value,
-    ]
-
-    rear_camber_label = create_label("Rear Camber", "data_category")
-    rear_camber_slider = create_slider(-3.50, -2.50, True)
-    rear_camber_slider.setSingleStep(0.01)
-    selected_rear_camber_value = create_label(str(rear_camber_slider.getValue()))
-    rear_camber_slider.valueChanged.connect(
-        lambda: selected_rear_camber_value.setText(str(rear_camber_slider.getValue()))
-    )
-    rear_camber_widgets = [
-        rear_camber_label,
-        rear_camber_slider,
-        selected_rear_camber_value,
-    ]
-
-    for widget in front_camber_widgets:
-        front_camber_layout.addWidget(widget)
-    for widget in rear_camber_widgets:
-        rear_camber_layout.addWidget(widget)
-
-    #  toe
-    front_toe_label = create_label("Front Toe", "data_category")
-    front_toe_slider = create_slider(0.05, 0.15, True)
-    front_toe_slider.setDecimals(2)  # two decimal places or the slider doesnt work
-    front_toe_slider.setSingleStep(0.01)
-    selected_front_toe_value_label = create_label(str(front_toe_slider.getValue()))
-    front_toe_slider.valueChanged.connect(
-        lambda: selected_front_toe_value_label.setText(str(front_toe_slider.getValue()))
-    )
-    front_toe_widgets = [
-        front_toe_label,
-        front_toe_slider,
-        selected_front_toe_value_label,
-    ]
-
-    rear_toe_label = create_label("Rear Toe", "data_category")
-    rear_toe_slider = create_slider(0.2, 0.5, True)
-    rear_toe_slider.setDecimals(2)
-    rear_toe_slider.setSingleStep(0.01)
-
-    selected_rear_toe_value_label = create_label(str(rear_toe_slider.getValue()))
-    rear_toe_slider.valueChanged.connect(
-        lambda: selected_rear_toe_value_label.setText(str(rear_toe_slider.getValue()))
-    )
-    rear_toe_widgets = [rear_toe_label, rear_toe_slider, selected_rear_toe_value_label]
-
-    for widget in front_toe_widgets:
-        front_toe_layout.addWidget(widget)
-    for widget in rear_toe_widgets:
-        rear_toe_layout.addWidget(widget)
-
-    return suspension_geo_page
-
-
-def create_suspension_tab():
-
-    # general layouts
-    suspension_page = QWidget()
-    suspension_page_layout = QVBoxLayout()
-    suspension_page.setLayout(suspension_page_layout)
-
-    # all the sliders share the same min and max so just define them here
-    SLIDER_MIN = 1
-    SLIDER_MAX = 11
-    sliders = []
-    # suspension layout
-    front_suspension_layout = QHBoxLayout()
-    rear_suspension_layout = QHBoxLayout()
-
-    # arb layout
-    front_arb_layout = QHBoxLayout()
-    rear_arb_layout = QHBoxLayout()
-
-    # rh layout
-    front_rh_layout = QHBoxLayout()
-    rear_rh_layout = QHBoxLayout()
-    layouts = [
-        front_suspension_layout,
-        rear_suspension_layout,
-        front_arb_layout,
-        rear_arb_layout,
-        front_rh_layout,
-        rear_rh_layout,
-    ]
-
-    for layout in layouts:
-        suspension_page_layout.addLayout(layout)
-
-    # Suspension
-    front_suspension_label = create_label(
-        "Front Suspension (soft - firm)", "data_category"
-    )
-    front_suspension_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
-    selected_front_suspension_value_label = create_label(
-        str(front_suspension_slider.getValue())
-    )
-    front_suspension_slider.valueChanged.connect(
-        lambda: selected_front_suspension_value_label.setText(
-            str(front_suspension_slider.getValue())
-        )
-    )
-    front_suspension_widgets = [
-        front_suspension_label,
-        front_suspension_slider,
-        selected_front_suspension_value_label,
-    ]
-    for widget in front_suspension_widgets:
-        front_suspension_layout.addWidget(widget)
-
-    # rear suspension
-
-    rear_suspension_label = create_label(
-        "Rear Suspension (soft - firm)", "data_category"
-    )
-    rear_suspension_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
-    selected_rear_suspension_value_label = create_label(
-        str(rear_suspension_slider.getValue())
-    )
-    rear_suspension_slider.valueChanged.connect(
-        lambda: selected_rear_suspension_value_label.setText(
-            str(rear_suspension_slider.getValue())
-        )
-    )
-
-    rear_suspension_widgets = [
-        rear_suspension_label,
-        rear_suspension_slider,
-        selected_rear_suspension_value_label,
-    ]
-
-    for widget in rear_suspension_widgets:
-        rear_suspension_layout.addWidget(widget)
-
-    # front anti roll bar
-    front_arb_label = create_label("Front Anti Roll Bar", "data_category")
-    front_arb_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
-    selected_front_arb_value_label = create_label(str(front_arb_slider.getValue()))
-    front_arb_slider.valueChanged.connect(
-        lambda: selected_front_arb_value_label.setText(str(front_arb_slider.getValue()))
-    )
-    front_arb_widgets = [
-        front_arb_label,
-        front_arb_slider,
-        selected_front_arb_value_label,
-    ]
-    for widget in front_arb_widgets:
-        front_arb_layout.addWidget(widget)
-
-    # rear anti roll bar
-    rear_arb_label = create_label("Rear Anti Roll Bar")
-    rear_arb_label.setObjectName("data_category")
-    rear_arb_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
-    selected_rear_arb_value_label = create_label(str(rear_arb_slider.getValue()))
-    rear_arb_slider.valueChanged.connect(
-        lambda: selected_rear_arb_value_label.setText(str(rear_arb_slider.getValue()))
-    )
-    rear_arb_widgets = [rear_arb_label, rear_arb_slider, selected_rear_arb_value_label]
-    for widget in rear_arb_widgets:
-        rear_arb_layout.addWidget(widget)
-
-    # front ride height
-    front_rh_label = create_label("Front Ride Height", "data_category")
-    front_rh_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
-    selected_front_rh_value_label = create_label(str(front_rh_slider.getValue()))
-    front_rh_slider.valueChanged.connect(
-        lambda: selected_front_rh_value_label.setText(str(front_rh_slider.getValue()))
-    )
-    front_rh_widgets = [front_rh_label, front_rh_slider, selected_front_rh_value_label]
-
-    for widget in front_rh_widgets:
-        front_rh_layout.addWidget(widget)
-
-    # rear ride height
-    rear_rh_label = create_label("Rear Ride Height", "data_category")
-    rear_rh_slider = create_slider(SLIDER_MIN, SLIDER_MAX, False)
-    selected_rear_rh_value_label = create_label(str(rear_rh_slider.getValue()))
-    rear_rh_slider.valueChanged.connect(
-        lambda: selected_rear_rh_value_label.setText(str(rear_rh_slider.getValue()))
-    )
-    rear_rh_widgets = [rear_rh_label, rear_rh_slider, selected_rear_rh_value_label]
-    for widget in rear_rh_widgets:
-        rear_rh_layout.addWidget(widget)
-
-    return suspension_page
-
-
-def create_brakes_tab():
-    # create the brakes page
-    brakes_page = QWidget()
-    # layout
-    brakes_page_layout = QVBoxLayout()
-    brakes_page.setLayout(brakes_page_layout)
-    brake_bias_layout = QHBoxLayout()
-    brake_pressure_layout = QHBoxLayout()
-
-    layouts = [brake_pressure_layout, brake_bias_layout]
-    for layout in layouts:
-        brakes_page_layout.addLayout(layout)
-
-    brake_pressure_label = create_label("Brake Pressure %", "data_category")
-    brake_pressure_slider = create_slider(50, 100, False)
-    selected_brake_pressure_value_label = create_label(
-        str(brake_pressure_slider.getValue())
-    )
-    brake_pressure_slider.valueChanged.connect(
-        lambda: selected_brake_pressure_value_label.setText(
-            str(brake_pressure_slider.getValue())
-        )
-    )
-    brake_pressure_widgets = [
-        brake_pressure_label,
-        brake_pressure_slider,
-        selected_brake_pressure_value_label,
-    ]
-
-    for widget in brake_pressure_widgets:
-        brake_pressure_layout.addWidget(widget)
-
-    brakes_page_layout.addLayout(brake_pressure_layout)
-    brakes_page_layout.addLayout(brake_bias_layout)
-
-    brake_bias_label = create_label("Brake Bias (Front ---  Rear) %", "data_category")
-    brake_bias_slider = create_slider(50, 70, False)
-    selected_brake_bias_value_label = create_label(str(brake_bias_slider.getValue()))
-    brake_bias_slider.valueChanged.connect(
-        lambda: selected_brake_bias_value_label.setText(
-            str(brake_bias_slider.getValue())
-        )
-    )
-
-    brake_bias_widgets = [
-        brake_bias_label,
-        brake_bias_slider,
-        selected_brake_bias_value_label,
-    ]
-
-    for widget in brake_bias_widgets:
-        brake_bias_layout.addWidget(widget)
-
-    return brakes_page
-
-
-def create_tires_tab():
-    tires_page = QWidget()
-    # layouts
-    tires_page_layout = QVBoxLayout()
-    tires_page.setLayout(tires_page_layout)
-
-    front_tire_pressure_layout = QHBoxLayout()
-    rear_tire_pressure_layout = QHBoxLayout()
-
-    tires_page_layout.addLayout(front_tire_pressure_layout)
-    tires_page_layout.addLayout(rear_tire_pressure_layout)
-
-    # front tire pressure section
-    front_tp_label = create_label("Front Tire Pressure", "data_category")
-
-    front_tp_slider = create_slider(21, 25, True)
-    front_tp_slider.setSingleStep(0.4)
-    selected_front_tp_value_label = create_label(str(front_tp_slider.getValue()))
-    front_tp_slider.valueChanged.connect(
-        lambda: selected_front_tp_value_label.setText(str(front_tp_slider.getValue()))
-    )
-    front_tp_widgets = [front_tp_label, front_tp_slider, selected_front_tp_value_label]
-
-    for widget in front_tp_widgets:
-        front_tire_pressure_layout.addWidget(widget)
-
-    # rear tires
-    rear_tp_label = create_label("Rear Tire Pressure", "data_category")
-    rear_tp_slider = create_slider(19.5, 23.5, True)
-    rear_tp_slider.setSingleStep(0.4)
-    selected_rear_tp_value_label = create_label(str(rear_tp_slider.getValue()))
-    rear_tp_slider.valueChanged.connect(
-        lambda: selected_rear_tp_value_label.setText(str(rear_tp_slider.getValue()))
-    )
-
-    rear_tp_widgets = [rear_tp_label, rear_tp_slider, selected_rear_tp_value_label]
-    for widget in rear_tp_widgets:
-        rear_tire_pressure_layout.addWidget(widget)
-
-    return tires_page
 
 
 def build_setup_input_window(
@@ -470,12 +57,24 @@ def build_setup_input_window(
 
     setup_tabs = QTabWidget()
     setup_input_window_layout.addWidget(setup_tabs)
-    aero_tab = create_aero_tab()
-    suspension_tab = create_suspension_tab()
-    transmission_tab = create_transmission_tab()
-    suspension_geometry_tab = create_suspension_geo_tab()
-    brakes_tab = create_brakes_tab()
-    tires_tab = create_tires_tab()
+
+    aero_tab_instance = AeroTab()
+    aero_tab = aero_tab_instance.init_tab()
+
+    transmission_tab_instance = TransmissionTab()
+    transmission_tab = transmission_tab_instance.init_tab()
+
+    suspension_geometry_tab_instance = SuspensionGeometryTab()
+    suspension_geometry_tab = suspension_geometry_tab_instance.init_tab()
+
+    suspension_tab_instance = SuspensionTab()
+    suspension_tab = suspension_tab_instance.init_tab()
+
+    brakes_tab_instance = BrakesTab()
+    brakes_tab = brakes_tab_instance.init_tab()
+
+    tires_tab_instance = TiresTab()
+    tires_tab = tires_tab_instance.init_tab()
 
     setup_tabs.addTab(aero_tab, "Aerodynamics")
     setup_tabs.addTab(transmission_tab, "Transmission")
@@ -781,8 +380,9 @@ def build_converted_window_widget(new_setup):
     return new_setup_window
 
 
+# TODO: Implement Overlay Page
 def build_overlay_page(overlay_widget: QWidget, overlay_layout: QVBoxLayout):
-    return
+    NotImplemented
 
 
 def find_back_button(widget_stack: QStackedWidget):

@@ -14,7 +14,6 @@ from pyqt_advanced_slider import Slider
 from f1sc.util import create_label, create_slider
 
 
-# test
 from f1sc.tabs.AeroTab import AeroTab
 from f1sc.tabs.TransmissionTab import TransmissionTab
 from f1sc.tabs.SuspensionTab import SuspensionTab

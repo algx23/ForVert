@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
     QStackedWidget,
 )
 from pyqt_advanced_slider import Slider
-from f1sc.util import create_label, create_slider
+from f1sc.util import create_label
 
 
 from f1sc.tabs.AeroTab import AeroTab
@@ -20,6 +20,8 @@ from f1sc.tabs.SuspensionTab import SuspensionTab
 from f1sc.tabs.SuspensionGeoTab import SuspensionGeometryTab
 from f1sc.tabs.BrakesTab import BrakesTab
 from f1sc.tabs.TiresTab import TiresTab
+
+from f1sc.SetupUpdater import Updater
 
 
 def build_menu_page(menu_page_layout: QVBoxLayout):
@@ -180,100 +182,7 @@ def get_data_from_tab_layouts(tabs_and_layouts):
     return setup_values
 
 
-def update_aerodynamics(init_aero_vals):
-    front_wing = init_aero_vals["Front Wing Aero"]
-    rear_wing = init_aero_vals["Rear Wing Aero"]
-
-    if front_wing + 2 < 11:
-        front_wing += 2
-    if rear_wing + 2 < 11:
-        rear_wing += 2
-    return (front_wing, rear_wing)
-
-
-def update_transmission(init_transmission_vals):
-    diff_on_throttle = init_transmission_vals["Differential Adjustment On Throttle (%)"]
-    diff_off_throttle = init_transmission_vals[
-        "Differential Adjustment Off throttle (%)"
-    ]
-
-    diff_on_throttle = 50
-    if diff_off_throttle >= 70:
-        diff_off_throttle = 65
-    return (diff_on_throttle, diff_off_throttle)
-
-
-def update_suspension_geometry(init_sg_vals):
-    front_camber = init_sg_vals["Front Camber"]
-    rear_camber = init_sg_vals["Rear Camber"]
-    front_toe = init_sg_vals["Front Toe"]
-    rear_toe = init_sg_vals["Rear Toe"]
-
-    if rear_camber > -3.5:
-        rear_camber -= 0.10
-    return (front_camber, rear_camber, front_toe, rear_toe)
-
-
-def update_suspension(init_suspension_val):
-    front_suspension = init_suspension_val["Front Suspension (soft - firm)"]
-    rear_suspension = init_suspension_val["Rear Suspension (soft - firm)"]
-    front_arb = init_suspension_val["Front Anti Roll Bar"]
-    rear_arb = init_suspension_val["Rear Anti Roll Bar"]
-    front_rh = init_suspension_val["Front Ride Height"]
-    rear_rh = init_suspension_val["Rear Ride Height"]
-
-    if front_suspension > 5:
-        front_suspension -= 2
-    else:
-        front_suspension -= 1
-
-    if rear_suspension > 5:
-        rear_suspension -= 2
-    else:
-        rear_suspension -= 1
-
-    if rear_arb > 8:
-        rear_arb -= 1
-
-    front_rh += 5
-    rear_rh += 5
-
-    # check the vals are within the ranges in the game
-    front_suspension = 1 if front_suspension < 1 else front_suspension
-    rear_suspension = 1 if rear_suspension < 1 else rear_suspension
-    front_arb = 1 if front_arb < 1 else front_arb
-    rear_arb = 1 if rear_arb < 1 else rear_arb
-    front_rh = 11 if front_rh > 11 else front_rh
-    rear_rh = 11 if rear_rh > 11 else rear_rh
-
-    return (front_suspension, rear_suspension, front_arb, rear_arb, front_rh, rear_rh)
-
-
-def update_brakes(init_brake_vals):
-    brake_pressure = init_brake_vals["Brake Pressure %"]
-    brake_bias = init_brake_vals["Brake Bias (Front ---  Rear) %"]
-
-    brake_pressure = 89
-    brake_bias = 52 if brake_bias >= 53 else brake_bias
-    return (brake_pressure, brake_bias)
-
-
-def update_tires(init_tire_pressures):
-    front_tire_pressure = init_tire_pressures["Front Tire Pressure"]
-    rear_tire_pressure = init_tire_pressures["Rear Tire Pressure"]
-
-    front_tire_pressure -= 0.4
-    rear_tire_pressure -= 0.8
-
-    front_tire_pressure = (
-        21 if front_tire_pressure < 21 else round(front_tire_pressure, 1)
-    )
-    rear_tire_pressure = (
-        19.5 if rear_tire_pressure < 19.5 else round(rear_tire_pressure, 1)
-    )
-    return (front_tire_pressure, rear_tire_pressure)
-
-
+# TODO: FIX THIS FUNCTION
 def convert_setup(widget_containing_tw):
     """
     This function will take the values entered, and on a button press, convert the values,
@@ -281,17 +190,24 @@ def convert_setup(widget_containing_tw):
     """
     layouts = get_layouts_of_tabs(widget_containing_tw=widget_containing_tw)
     setup_vals = get_data_from_tab_layouts(layouts)
+    setup_updater = Updater(setup_vals)
 
     result_dict = dict()
 
-    new_aero_values = update_aerodynamics(setup_vals["Aerodynamics"])
-    new_transmission_values = update_transmission(setup_vals["Transmission"])
-    new_suspension_geometry_values = update_suspension_geometry(
+    new_setup_values = setup_updater.convert_dry_setup_to_wet()
+    exit(0)
+    # TODO Fix result dictionary building logic contained in =====
+    # ================================================================================
+    new_aero_values = setup_updater.update_aerodynamics(setup_vals["Aerodynamics"])
+    new_transmission_values = setup_updater.update_transmission(
+        setup_vals["Transmission"]
+    )
+    new_suspension_geometry_values = setup_updater.update_suspension_geometry(
         setup_vals["Suspension Geometry"]
     )
-    new_suspension_values = update_suspension(setup_vals["Suspension"])
-    new_brake_values = update_brakes(setup_vals["Brakes"])
-    new_tire_pressure_values = update_tires(setup_vals["Tires"])
+    new_suspension_values = setup_updater.update_suspension(setup_vals["Suspension"])
+    new_brake_values = setup_updater.update_brakes(setup_vals["Brakes"])
+    new_tire_pressure_values = setup_updater.update_tires(setup_vals["Tires"])
 
     # build the dict
     result_dict["Aerodynamics"] = {
@@ -324,7 +240,7 @@ def convert_setup(widget_containing_tw):
         "Front Tire Pressure": new_tire_pressure_values[0],
         "Rear Tire Pressure": new_tire_pressure_values[1],
     }
-
+    # ================================================================
     return result_dict
 
 

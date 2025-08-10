@@ -21,7 +21,7 @@ from f1sc.tabs.SuspensionGeoTab import SuspensionGeometryTab
 from f1sc.tabs.BrakesTab import BrakesTab
 from f1sc.tabs.TiresTab import TiresTab
 
-from f1sc.SetupUpdater import Updater
+from f1sc.SetupUpdater import F1SetupUpdater
 
 
 def build_menu_page(menu_page_layout: QVBoxLayout):
@@ -182,7 +182,7 @@ def convert_setup(widget_containing_tw):
     """
     layouts = get_layouts_of_tabs(widget_containing_tw=widget_containing_tw)
     setup_vals = get_data_from_tab_layouts(layouts)
-    setup_updater = Updater(setup_vals)
+    setup_updater = F1SetupUpdater(setup_vals)
 
     result_dict = dict()
 

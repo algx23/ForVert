@@ -117,7 +117,6 @@ class F1SetupUpdater:
             "Rear Tire Pressure": rear_tire_pressure,
         }
 
-    # TODO: FIX THIS
     def convert_dry_setup_to_wet(self):
         """This function will update all of the individual parts of the F1 Setup
           and return the converted values, to the user, to use in wet conditions

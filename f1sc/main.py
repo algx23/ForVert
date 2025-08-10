@@ -165,19 +165,11 @@ def get_data_from_tab_layouts(tabs_and_layouts):
                     isinstance(widget_in_layout, QLabel)
                     and widget_in_layout.objectName() == "data_category"
                 ):
-                    # print(widget_in_layout.text())
                     data_category = widget_in_layout.text()
                 elif isinstance(widget_in_layout, Slider):
-                    # print(f"slider value : {widget_in_layout.value()}")
                     value_of_category = widget_in_layout.getValue()
             if data_category != "" and value_of_category != 0:
                 setup_values[title][data_category] = value_of_category
-
-    # the values for suspension geometry needs to be divided by 100
-    # map_slider_values(setup_values["Suspension Geometry"], factor=0.01)
-
-    # tire pressure values need to be divided by 10
-    # map_slider_values(setup_values["Tires"], factor=0.1)
 
     return setup_values
 
@@ -258,7 +250,6 @@ def create_converted_setup_window():
 
 
 def build_converted_window_widget(new_setup):
-    # print(new_setup)
 
     new_setup_window = create_converted_setup_window()
     new_setup_window.setWindowTitle("Converted Setup")

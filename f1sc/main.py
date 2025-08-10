@@ -184,56 +184,9 @@ def convert_setup(widget_containing_tw):
     setup_vals = get_data_from_tab_layouts(layouts)
     setup_updater = F1SetupUpdater(setup_vals)
 
-    result_dict = dict()
-
     new_setup_values = setup_updater.convert_dry_setup_to_wet()
-    exit(0)
-    # TODO Fix result dictionary building logic contained in =====
-    # ================================================================================
-    new_aero_values = setup_updater.update_aerodynamics(setup_vals["Aerodynamics"])
-    new_transmission_values = setup_updater.update_transmission(
-        setup_vals["Transmission"]
-    )
-    new_suspension_geometry_values = setup_updater.update_suspension_geometry(
-        setup_vals["Suspension Geometry"]
-    )
-    new_suspension_values = setup_updater.update_suspension(setup_vals["Suspension"])
-    new_brake_values = setup_updater.update_brakes(setup_vals["Brakes"])
-    new_tire_pressure_values = setup_updater.update_tires(setup_vals["Tires"])
 
-    # build the dict
-    result_dict["Aerodynamics"] = {
-        "front wing": new_aero_values[0],
-        "rear_wing": new_aero_values[1],
-    }
-    result_dict["Transmission"] = {
-        "Diff on throttle": new_transmission_values[0],
-        "diff off throttle": new_transmission_values[1],
-    }
-    result_dict["Suspension Geometry"] = {
-        "Front Camber": new_suspension_geometry_values[0],
-        "Rear Camber": new_suspension_geometry_values[1],
-        "Front Toe": new_suspension_geometry_values[2],
-        "Rear Toe": new_suspension_geometry_values[3],
-    }
-    result_dict["Suspension"] = {
-        "Front Suspension": new_suspension_values[0],
-        "Rear Suspension": new_suspension_values[1],
-        "Front Anti Roll Bar": new_suspension_values[2],
-        "Rear Anti Roll Bar": new_suspension_values[3],
-        "Front Ride Height": new_suspension_values[4],
-        "Rear Ride Height": new_suspension_values[5],
-    }
-    result_dict["Brakes"] = {
-        "Brake Pressure": new_brake_values[0],
-        "Brake Bias": new_brake_values[1],
-    }
-    result_dict["Tires"] = {
-        "Front Tire Pressure": new_tire_pressure_values[0],
-        "Rear Tire Pressure": new_tire_pressure_values[1],
-    }
-    # ================================================================
-    return result_dict
+    return new_setup_values
 
 
 def create_converted_setup_window():

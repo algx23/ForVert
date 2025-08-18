@@ -174,7 +174,6 @@ def get_data_from_tab_layouts(tabs_and_layouts):
     return setup_values
 
 
-# TODO: FIX THIS FUNCTION
 def convert_setup(widget_containing_tw):
     """
     This function will take the values entered, and on a button press, convert the values,
